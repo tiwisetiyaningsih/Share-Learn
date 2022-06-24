@@ -25,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -70,6 +71,7 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+            {/* <AntDesign name='forward' size={50}></AntDesign> */}
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
