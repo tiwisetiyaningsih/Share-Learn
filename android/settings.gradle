@@ -1,4 +1,4 @@
-rootProject.name = 'share_learn'
+rootProject.name = 'Share Learn'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 includeBuild('../node_modules/react-native-gradle-plugin')
