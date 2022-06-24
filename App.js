@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   highlight: {
-    fontWeight: '700',
+    // fontWeight: '700',
+    fontFamily: 'Inter-Bold'
   },
 });
 
