@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "419946158881",
+    "project_id": "share-learn-6cdd3",
+    "storage_bucket": "share-learn-6cdd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419946158881:android:9e162b83e09c759df7fc60",
+        "android_client_info": {
+          "package_name": "com.share_learn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419946158881-2nivignbongtipban929iot3iaa9ush0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBclw60KIuSL2CfeMMmBQFJ9E-wY2oIXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419946158881-2nivignbongtipban929iot3iaa9ush0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
