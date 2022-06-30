@@ -14,7 +14,7 @@ export class Notes extends Component {
         <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
         <Header navigation={this.props.navigation}></Header>
         <ScrollView>
-          <ListNotes></ListNotes>
+          <ListNotes navigation={this.props.navigation}></ListNotes>
         </ScrollView>
         <Fouter navigation={this.props.navigation}></Fouter>
       </View>
@@ -28,19 +28,21 @@ const Header = ({ navigation }) => (
       onPress={() => { navigation.navigate('home') }}>
       <Octicons name='chevron-left' size={25} color='black'></Octicons>
     </BaseButton>
-    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: 'black' }}>Notes</Text>
-    <BaseButton>
+    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: 'black' }}>Notes</Text>
+    <BaseButton
+    onPress={()=>{navigation.navigate('createnotes')}}>
       <AntDesign name='pluscircle' size={20} color='#38C6C6'></AntDesign>
     </BaseButton>
   </View>
 )
 
-const ListNotes = () => (
+const ListNotes = ({navigation}) => (
   <View style={{flexDirection: 'row', paddingHorizontal: 30, justifyContent:'space-between', paddingVertical: 15, borderBottomColor: '#DADADA', borderBottomWidth: 1}}>
-    <View style={{ flexDirection: 'column'}}>
+    <BaseButton style={{ flexDirection: 'column', paddingRight: 200, paddingVertical: 5}}
+    onPress={()=>{navigation.navigate('detailnotes')}}>
       <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color:'black'}}>Matematika</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color:'black'}}>Bab Logika Matematika</Text>
-    </View>
+    </BaseButton>
     <View>
       <Ionicons name='ellipsis-horizontal' size={20} color='black'></Ionicons>
     </View>

@@ -13,7 +13,7 @@ export class Profile extends Component {
       <View style={style.app}>
         <StatusBar backgroundColor={'#BFFBFB'} barStyle='dark-content'></StatusBar>
         <ScrollView>
-          <Profil></Profil>
+          <Profil navigation={this.props.navigation}></Profil>
         </ScrollView>
         <Fouter navigation={this.props.navigation}></Fouter>
       </View>
@@ -21,7 +21,7 @@ export class Profile extends Component {
   }
 }
 
-const Profil = () => (
+const Profil = ({ navigation }) => (
   <View>
     <Image source={require('../assets/images/header_profile.png')}></Image>
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, flexDirection: 'row' }}>
@@ -34,50 +34,80 @@ const Profil = () => (
       </View>
     </View>
     <View style={{ paddingHorizontal: 20, paddingTop: 30 }}>
-      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black' }}>User Settings</Text>
-      <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingTop: 25, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <MaterialCommunityIcons name='account-box' size={20} color='black'></MaterialCommunityIcons>
-          <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>My Account</Text>
+      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black', paddingBottom: 20 }}>User Settings</Text>
+      <BaseButton
+        onPress={() => { navigation.navigate('myaccount') }}>
+        <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <MaterialCommunityIcons name='account-box' size={20} color='black'></MaterialCommunityIcons>
+            <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>My Account</Text>
+          </View>
+          <BaseButton
+            onPress={() => { navigation.navigate('myaccount') }}>
+            <Feather name='chevron-right' size={20} color='black'></Feather>
+          </BaseButton>
         </View>
-        <Feather name='chevron-right' size={20} color='black'></Feather>
-      </View>
-      <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingVertical: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <MaterialCommunityIcons name='post' size={20} color='black'></MaterialCommunityIcons>
-          <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>My Post</Text>
+      </BaseButton>
+      <BaseButton
+        onPress={() => { navigation.navigate('mypost') }}>
+        <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingVertical: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <MaterialCommunityIcons name='post' size={20} color='black'></MaterialCommunityIcons>
+            <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>My Post</Text>
+          </View>
+          <BaseButton
+            onPress={() => { navigation.navigate('mypost') }}>
+            <Feather name='chevron-right' size={20} color='black'></Feather>
+          </BaseButton>
         </View>
-        <Feather name='chevron-right' size={20} color='black'></Feather>
-      </View>
-      <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingVertical: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <AntDesign name='staro' size={20} color='black'></AntDesign>
-          <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Liked Posts</Text>
+      </BaseButton>
+      <BaseButton
+        onPress={() => { navigation.navigate('likedposts') }}>
+        <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingVertical: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <AntDesign name='staro' size={20} color='black'></AntDesign>
+            <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Liked Posts</Text>
+          </View>
+          <BaseButton
+            onPress={() => { navigation.navigate('likedposts') }}>
+            <Feather name='chevron-right' size={20} color='black'></Feather>
+          </BaseButton>
         </View>
-        <Feather name='chevron-right' size={20} color='black'></Feather>
-      </View>
+      </BaseButton>
     </View>
     <View style={{ paddingHorizontal: 20, paddingTop: 25 }}>
-      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black' }}>About</Text>
-      <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingTop: 25, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
-        <View style={{ flexDirection: 'row' }}>
-          <MaterialCommunityIcons name='book-information-variant' size={20} color='black'></MaterialCommunityIcons>
-          <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Information</Text>
+      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black', paddingBottom: 15, }}>About</Text>
+      <BaseButton
+        onPress={() => { navigation.navigate('information') }}>
+        <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <MaterialCommunityIcons name='book-information-variant' size={20} color='black'></MaterialCommunityIcons>
+            <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Information</Text>
+          </View>
+          <BaseButton
+            onPress={() => { navigation.navigate('information') }}>
+            <Feather name='chevron-right' size={20} color='black'></Feather>
+          </BaseButton>
         </View>
-        <Feather name='chevron-right' size={20} color='black'></Feather>
-      </View>
+      </BaseButton>
     </View>
     <View style={{ paddingHorizontal: 20, paddingTop: 25 }}>
-      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black' }}>Login</Text>
-      <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingTop: 25, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
-        <View style={{ flexDirection: 'row' }}>
-          <Ionicons name='ios-exit' size={20} color='black'></Ionicons>
-          <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Log Out</Text>
+      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black', paddingBottom: 15}}>Login</Text>
+      <BaseButton
+        onPress={() => { }}>
+        <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Ionicons name='ios-exit' size={20} color='black'></Ionicons>
+            <Text style={{ fontFamily: 'Inter-Medium', fontSize: 14, color: 'black', paddingStart: 10 }}>Log Out</Text>
+          </View>
+          <BaseButton
+            onPress={() => { }}>
+            <Feather name='chevron-right' size={20} color='black'></Feather>
+          </BaseButton>
         </View>
-        <Feather name='chevron-right' size={20} color='black'></Feather>
-      </View>
+      </BaseButton>
     </View>
-  </View>
+  </View >
 )
 
 const Fouter = ({ navigation }) => (
