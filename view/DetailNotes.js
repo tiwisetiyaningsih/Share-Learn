@@ -29,25 +29,27 @@ const Header = ({ navigation }) => (
 
 const Detail = () => (
     <View style={{ backgroundColor: '#FFF', padding: 20 }}>
-        <View style={{ flexDirection:'row', justifyContent: 'space-between'}}>
-            <View style={{ alignItems: 'center', justifyContent:'center', paddingLeft: 120}}>
-                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000'}}>Matematika</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingLeft: 120 }}>
+                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000' }}>Matematika</Text>
                 <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#000' }}>Bab Logika Matematika</Text>
             </View>
-            <Feather name='more-horizontal' size={18} color='#000'></Feather>
+            <BaseButton style={{ marginBottom: 20, padding: 5}}>
+                <Feather name='more-horizontal' size={18} color='#000'></Feather>
+            </BaseButton>
         </View>
-        <View style={{ paddingVertical: 30, paddingHorizontal: 10}}>
+        <View style={{ paddingVertical: 30, paddingHorizontal: 10 }}>
             <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#000' }}>
-            A. Pengertian 
-            Pernyataan adalah kalimat yang bisa benar atau bisa salah. Sementara kalimat terbuka adalah jenis kalimat yang belum diketahui kebenarannya. Contoh pernyataan, berikut adalah salah satu contohnya:
-            1.Indonesia Raya adalah lagu kebangsaan Indonesia. -pernyataan benar
-            2.Bika ambon berasal dari Ambon. -pernyataan salah
-            
-            B. Macam - macam kalimat Majemuk
-            konjungsi
-            Disjungsi
-            Implikasi
-            Biimplikasi
+                A. Pengertian
+                Pernyataan adalah kalimat yang bisa benar atau bisa salah. Sementara kalimat terbuka adalah jenis kalimat yang belum diketahui kebenarannya. Contoh pernyataan, berikut adalah salah satu contohnya:
+                1.Indonesia Raya adalah lagu kebangsaan Indonesia. -pernyataan benar
+                2.Bika ambon berasal dari Ambon. -pernyataan salah
+
+                B. Macam - macam kalimat Majemuk
+                konjungsi
+                Disjungsi
+                Implikasi
+                Biimplikasi
             </Text>
         </View>
     </View>

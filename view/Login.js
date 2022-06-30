@@ -31,14 +31,14 @@ const BodyLogin = ({navigation}) => (
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Username</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your username' style={{ paddingStart: 10 }}></TextInput>
+            <TextInput placeholder='Your username' style={{ paddingStart: 10, marginEnd: 10}}></TextInput>
           </View>
         </View>
         <View style={{ paddingTop: 10, paddingHorizontal: 20 }}>
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Password</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account-lock' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your password' style={{ paddingStart: 10 }}></TextInput>
+            <TextInput placeholder='Your password' style={{ paddingStart: 10, marginEnd: 10}} secureTextEntry></TextInput>
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>

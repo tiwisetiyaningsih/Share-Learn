@@ -43,9 +43,9 @@ const ListNotes = ({navigation}) => (
       <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color:'black'}}>Matematika</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color:'black'}}>Bab Logika Matematika</Text>
     </BaseButton>
-    <View>
+    <BaseButton style={{ marginBottom: 20, padding: 5}}>
       <Ionicons name='ellipsis-horizontal' size={20} color='black'></Ionicons>
-    </View>
+    </BaseButton>
   </View>
 )
 

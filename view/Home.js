@@ -105,20 +105,20 @@ const PostRecommentPdf = ({ navigation }) => (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton>
+                    <BaseButton style={{padding:5}}>
                         <AntDesign name='staro' size={20} color='black'></AntDesign>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
                 <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton
+                    <BaseButton style={{padding:5}}
                     onPress={()=>{navigation.navigate('comment')}}>
                         <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
             </View>
-            <BaseButton>
+            <BaseButton style={{padding: 5}}>
                 <Octicons name='download' size={20} color='black'></Octicons>
             </BaseButton>
         </View>
@@ -147,20 +147,20 @@ const PostRecommentImage = ({ navigation }) => (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton>
+                    <BaseButton style={{padding:5}}>
                         <AntDesign name='staro' size={20} color='black'></AntDesign>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
                 <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton
+                    <BaseButton style={{padding:5}}
                     onPress={()=>{navigation.navigate('comment')}}>
                         <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
             </View>
-            <BaseButton>
+            <BaseButton style={{padding:5}}>
                 <Octicons name='download' size={20} color='black'></Octicons>
             </BaseButton>
         </View>

@@ -33,20 +33,20 @@ const Header = ({ navigation }) => (
 )
 
 const ListnNotif = () => (
-    <View style={{ padding: 20, backgroundColor: '#FFF', marginBottom: 3, elevation: 1}}>
+    <View style={{ padding: 20, backgroundColor: '#FFF' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row' }}>
                 <Image source={require('../assets/logo/user_profile.png')}></Image>
                 <View style={{ flexDirection: 'column' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000', paddingStart: 10 }}>Usernm_1</Text>
-                        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#626262', paddingHorizontal: 3 }}>Baru saja posting</Text>
+                        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000', paddingStart: 10 }}>Usernm_1,</Text>
+                        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', paddingHorizontal: 3 }}>Baru saja posting</Text>
                     </View>
-                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: '#AAA', paddingStart: 10 }}>25 April 2022, 10.05</Text>
+                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 10, color: '#000', paddingStart: 10 }}>25 April 2022, 10.05</Text>
                 </View>
             </View>
             <BaseButton style={{ padding: 5 }}>
-                <Ionicons name='close' size={20} color='#000'></Ionicons>
+                <Ionicons name='close' size={15} color='#000'></Ionicons>
             </BaseButton>
         </View>
     </View>

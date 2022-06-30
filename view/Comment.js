@@ -62,7 +62,7 @@ const PostRecommentPdf = ({ navigation }) => (
             <Image source={require('../assets/images/pdf.png')} style={{ width: 371.5, height: 42.5 }}></Image>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', padding: 10 }}>
-            <BaseButton>
+            <BaseButton style={{padding:5}}>
                 <Octicons name='download' size={20} color='black'></Octicons>
             </BaseButton>
         </View>
@@ -81,7 +81,7 @@ const ListComment = () => (
                     <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Username</Text>
                     <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>25 April 2022, 10.05</Text>
                 </View>
-                <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10, paddingHorizontal: 10 }}>wahhh materinya lengkap bat.... :’)</Text>
+                <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10, paddingHorizontal: 10 }}>thanks....</Text>
             </View>
         </View>
         <Entypo name='dots-three-horizontal' size={15} color='black'></Entypo>

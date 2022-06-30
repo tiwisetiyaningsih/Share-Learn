@@ -1,20 +1,28 @@
-import { Text, View, Image,StyleSheet, StatusBar } from 'react-native'
+import { View, Image, StyleSheet, StatusBar } from 'react-native'
 import React, { Component } from 'react'
+import { BaseButton } from 'react-native-gesture-handler'
 
 export class SplashScreen extends Component {
     render() {
         return (
             <View style={style.app}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-                <Image source={require('../assets/logo/orange.png')} ></Image>
-                <View style={{alignItems:'center', paddingTop: 70, paddingBottom: 80}}>
-                    <Image source={require('../assets/logo/logo_share_learn.png')} ></Image>
-                </View>
-                <Image source={require('../assets/logo/blue.png')} ></Image>
+                <SS navigation={this.props.navigation}></SS>
             </View>
         )
     }
 }
+
+const SS = ({navigation}) => (
+    <View>
+        <Image source={require('../assets/logo/orange.png')} ></Image>
+        <BaseButton style={{ alignItems: 'center', paddingTop: 70, paddingBottom: 80 }}
+            onPress={() => { navigation.navigate('pengenalanapp1') }}>
+            <Image source={require('../assets/logo/logo_share_learn.png')} ></Image>
+        </BaseButton>
+        <Image source={require('../assets/logo/blue.png')} ></Image>
+    </View>
+)
 
 const style = StyleSheet.create({
     app: {

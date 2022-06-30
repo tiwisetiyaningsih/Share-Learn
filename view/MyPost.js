@@ -28,11 +28,11 @@ export class MyPost extends Component {
 
 const Header = ({ navigation }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 30, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#38C6C6' }}>
-        <BaseButton style={{ padding: 5, marginLeft: -130 }}
+        <BaseButton style={{ padding: 5, marginLeft: -140 }}
             onPress={() => { navigation.navigate('profile') }}>
             <Octicons name='chevron-left' size={25} color='#FFF' ></Octicons>
         </BaseButton>
-        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#FFF', justifyContent: 'center' }}>My Post</Text>
+        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#FFF', justifyContent: 'center'}}>My Post</Text>
     </View>
 )
 
