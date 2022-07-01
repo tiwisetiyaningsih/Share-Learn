@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, Image, TextInput, StyleSheet } from 'react-native'
+import { Text, View, StatusBar, Image, TextInput, StyleSheet, TouchableOpacity  } from 'react-native'
 import React, { Component } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BaseButton } from 'react-native-gesture-handler'
@@ -17,7 +17,7 @@ export class Login extends Component {
 }
 
 const BodyLogin = ({navigation}) => (
-  <View>
+  <View style={{ elevation: 10 }}>
     <Image source={require('../assets/logo/share-learn-login.png')}></Image>
     <View style={{ paddingHorizontal: 40, elevation: 10 }}>
       <View style={{ alignItems: 'center', paddingVertical: 15 }}>
@@ -42,10 +42,10 @@ const BodyLogin = ({navigation}) => (
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
-          <BaseButton 
+          <TouchableOpacity
           onPress={()=>{navigation.navigate('home')}}>
             <Image source={require('../assets/images/btn-login.png')}></Image>
-          </BaseButton>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

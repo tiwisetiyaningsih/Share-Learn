@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, StyleSheet,ScrollView,Image,TextInput } from 'react-native'
+import { Text, View, StatusBar, StyleSheet,ScrollView,Image,TextInput, TouchableOpacity  } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from 'react-native-gesture-handler'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -65,10 +65,10 @@ const BodyRegister = ({navigation}) => (
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
-          <BaseButton 
+          <TouchableOpacity
           onPress={()=>{navigation.navigate('login')}}>
             <Image source={require('../assets/images/btn-register.png')}></Image>
-          </BaseButton>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

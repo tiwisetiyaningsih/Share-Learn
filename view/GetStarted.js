@@ -15,7 +15,7 @@ export class GetStarted extends Component {
 const Getstarted = ({ navigation }) => (
   <View>
     <Image source={require('../assets/images/getstarted.png')} style={{ width: 415 }}></Image>
-    <View style={{ backgroundColor: '#D2EDED', borderRadius: 20, padding: 20, marginVertical: 35, marginHorizontal: 25, alignItems: 'center' }}>
+    <View style={{ backgroundColor: '#D2EDED', borderRadius: 20, padding: 20, marginVertical: 35, marginHorizontal: 25, alignItems: 'center', elevation: 5 }}>
       <Text style={{ color: '#0E7E7E', fontFamily: 'Inter-Bold', fontSize: 32, paddingTop: 100, paddingHorizontal: 20 }}>Are you ready</Text>
       <Text style={{ color: '#0E7E7E', fontFamily: 'Inter-Bold', fontSize: 32, paddingBottom: 110 }}>to learn ?</Text>
     </View>

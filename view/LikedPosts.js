@@ -65,7 +65,7 @@ const PostPdf = ({ navigation }) => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <BaseButton>
-                        <AntDesign name='staro' size={20} color='black'></AntDesign>
+                        <AntDesign name='star' size={20} color='#E49500'></AntDesign>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
                 </View>
@@ -106,7 +106,7 @@ const PostImage = ({ navigation }) => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <BaseButton>
-                        <AntDesign name='staro' size={20} color='black'></AntDesign>
+                        <AntDesign name='star' size={20} color='#E49500'></AntDesign>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black', paddingLeft: 5 }}>1</Text>
                 </View>
