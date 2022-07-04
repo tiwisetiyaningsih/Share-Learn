@@ -1,22 +1,78 @@
-import { Text, View, StatusBar, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StatusBar, Image, TextInput, StyleSheet, TouchableOpacity, AsyncStorage, Alert } from 'react-native'
 import React, { Component } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BaseButton } from 'react-native-gesture-handler'
+import Constant from '../Componen/Constant'
 
 
 
 export class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      Username: '',
+      Password: ''
+    }
+  }
+
+  Login = async () => {
+    // this.props.navigation.navigate('home')
+    // return 
+    const { Username, Password } = this.state
+    console.log(Username, Password)
+
+    let postData =
+    {
+      "username": Username,
+      "password": Password
+    }
+    console.log(Constant.api_url + 'api/user/login')
+    // console.log ('postData', postData)
+    axios({
+      method: 'POST',
+      url: Constant.api_url + 'api/user/login',
+      data: postData
+    }).then(async (back) => {
+      let LoginUsers = back.data
+      await AsyncStorage.setItem("users", JSON.stringify(LoginUsers))
+
+      // console.log(back.data)
+      if (back.status === 200 && back.data.message === "data falid") {
+        console.log("hello")
+        const value = await AsyncStorage.getItem('users');
+        console.log("dari asyncStorage", value)
+        this.props.navigation.navigate('home')
+        this.setState({ Username: '', Password: '' })
+      } else {
+        Alert.alert("Gagal", back.data.message)
+      }
+    }).catch((error) => {
+      console.log("error", JSON.stringify(error))
+    })
+  }
+
+  SetUsername = (text) => {
+    this.setState({ Username: text })
+  }
+
+  SetPassword = (text) => {
+    this.setState({ Password: text })
+  }
+
   render() {
+    const { Username, Password } = this.state
+    console.log(Username, Password)
+
     return (
       <View style={style.app}>
         <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-        <BodyLogin navigation={this.props.navigation}></BodyLogin>
+        <BodyLogin navigation={this.props.navigation} Login={this.Login()} SetUsername={(text) => { this.SetUsername(text) }} SetPassword={(text) => {this.SetPassword(text)}}></BodyLogin>
       </View>
     )
   }
 }
 
-const BodyLogin = ({ navigation }) => (
+const BodyLogin = ({ navigation, Login, Username, Password, SetUsername, SetPassword }) => (
   <View style={{ elevation: 10 }}>
     <Image source={require('../assets/logo/share-learn-login.png')}></Image>
     <View style={{ paddingHorizontal: 40, elevation: 10 }}>
@@ -31,19 +87,27 @@ const BodyLogin = ({ navigation }) => (
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Username</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your username' style={{ paddingStart: 10, marginEnd: 10 }}></TextInput>
+            <TextInput style={{ paddingStart: 10, marginEnd: 10 }}
+              placeholder='Your username'
+              value={Username}
+              onChangeText={(text) => { SetUsername(text) }}
+              ></TextInput>
           </View>
         </View>
         <View style={{ paddingTop: 10, paddingHorizontal: 20 }}>
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Password</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account-lock' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your password' style={{ paddingStart: 10, marginEnd: 10 }} secureTextEntry></TextInput>
+            <TextInput style={{ paddingStart: 10, marginEnd: 10 }} secureTextEntry
+              placeholder='Your password'
+              value={Password}
+              onChangeText={(text) => { SetPassword(text) }}
+              ></TextInput>
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
           <TouchableOpacity
-            onPress={() => { navigation.navigate('home') }}>
+            onPress={() => { Login() }}>
             <Image source={require('../assets/images/btn-login.png')}></Image>
           </TouchableOpacity>
         </View>

@@ -103,16 +103,20 @@ const Header = ({ navigation }) => (
                 onPress={() => { navigation.navigate('listpostmapel') }}>
                 <Image source={require('../assets/logo/mapel_mat.png')}></Image>
             </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}>
+            <BaseButton style={{ marginLeft: 8 }}
+            onPress={() => { navigation.navigate('listpostmapel') }}>
                 <Image source={require('../assets/logo/mapel_kim.png')}></Image>
             </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}>
+            <BaseButton style={{ marginLeft: 8 }}
+            onPress={() => { navigation.navigate('listpostmapel') }}>
                 <Image source={require('../assets/logo/mapel_fis.png')}></Image>
             </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}>
+            <BaseButton style={{ marginLeft: 8 }}
+            onPress={() => { navigation.navigate('listpostmapel') }}>
                 <Image source={require('../assets/logo/mapel_indo.png')}></Image>
             </BaseButton>
-            <BaseButton style={{ marginLeft: 8, marginRight: 20 }} >
+            <BaseButton style={{ marginLeft: 8, marginRight: 20 }} 
+            onPress={() => { navigation.navigate('listpostmapel') }}>
                 <Image source={require('../assets/logo/mapel_inggris.png')}></Image>
             </BaseButton>
         </ScrollView>
