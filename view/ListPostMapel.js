@@ -27,7 +27,7 @@ export class ListPostMapel extends Component {
 }
 
 const Header = ({ navigation }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 30, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#38C6C6'}}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 30, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#38C6C6' }}>
         <BaseButton style={{ padding: 5, marginLeft: -130 }}
             onPress={() => { navigation.navigate('home') }}>
             <Octicons name='chevron-left' size={25} color='#FFF' ></Octicons>
@@ -100,7 +100,7 @@ const PostImage = ({ navigation }) => (
         </View>
         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas 11  - Rumus Peluang Kejadian</Text>
         <View style={{ alignItems: 'center' }}>
-            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 200}}></Image>
+            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 200 }}></Image>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

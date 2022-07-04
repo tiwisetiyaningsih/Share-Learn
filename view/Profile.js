@@ -92,7 +92,7 @@ const Profil = ({ navigation }) => (
       </BaseButton>
     </View>
     <View style={{ paddingHorizontal: 20, paddingTop: 25 }}>
-      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black', paddingBottom: 15}}>Login</Text>
+      <Text style={{ fontFamily: 'Inter-Medium', fontSize: 15, color: 'black', paddingBottom: 15 }}>Login</Text>
       <BaseButton
         onPress={() => { }}>
         <View style={{ paddingTop: 10, paddingHorizontal: 10, paddingBottom: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

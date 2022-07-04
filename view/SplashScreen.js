@@ -1,8 +1,12 @@
 import { View, Image, StyleSheet, StatusBar } from 'react-native'
 import React, { Component } from 'react'
-import { BaseButton } from 'react-native-gesture-handler'
 
 export class SplashScreen extends Component {
+    UNSAFE_componentWillMount = () => {
+        setTimeout(() => {
+            this.props.navigation.replace('pengenalanapp1')
+        }, 3000);
+    }
     render() {
         return (
             <View style={style.app}>
@@ -16,10 +20,10 @@ export class SplashScreen extends Component {
 const SS = ({navigation}) => (
     <View>
         <Image source={require('../assets/logo/orange.png')} ></Image>
-        <BaseButton style={{ alignItems: 'center', paddingTop: 70, paddingBottom: 80 }}
+        <View style={{ alignItems: 'center', paddingTop: 70, paddingBottom: 80 }}
             onPress={() => { navigation.navigate('pengenalanapp1') }}>
             <Image source={require('../assets/logo/logo_share_learn.png')} ></Image>
-        </BaseButton>
+        </View>
         <Image source={require('../assets/logo/blue.png')} ></Image>
     </View>
 )

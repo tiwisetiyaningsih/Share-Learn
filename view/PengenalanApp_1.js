@@ -17,7 +17,7 @@ export class PengenalanApp_1 extends Component {
 
 const Header = ({ navigation }) => (
     <View style={{ backgroundColor: '#FFF', paddingVertical: 25, paddingHorizontal: 40, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center', paddingBottom: 20 }}>
-        <BaseButton
+        <BaseButton style={{padding: 5}}
             onPress={() => { navigation.navigate('login') }}>
             <Text style={{ color: '#A3A3A3', fontFamily: 'Inter-Regular', fontSize: 12 }}>Skip</Text>
         </BaseButton>

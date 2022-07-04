@@ -18,7 +18,7 @@ export class EditNotes extends Component {
 
 const Header = ({ navigation }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
-        <BaseButton
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('notes') }}>
             <Octicons name='chevron-left' size={25} color='black'></Octicons>
         </BaseButton>

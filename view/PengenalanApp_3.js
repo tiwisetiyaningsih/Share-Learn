@@ -18,11 +18,11 @@ export class PengenalanApp_3 extends Component {
 
 const Header = ({ navigation }) => (
     <View style={{ backgroundColor: '#FFF', paddingVertical: 15, paddingHorizontal: 40, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingBottom: 20 }}>
-        <BaseButton style={{ padding: 5}}
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('pengenalanapp2') }}>
             <Octicons name='chevron-left' size={25} color='#FF8C00'></Octicons>
         </BaseButton>
-        <BaseButton
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('login') }}>
             <Text style={{ color: '#A3A3A3', fontFamily: 'Inter-Regular', fontSize: 12 }}>Skip</Text>
         </BaseButton>
@@ -37,8 +37,8 @@ const Body = ({ navigation }) => (
         <Image source={require('../assets/images/p-app.png')}></Image>
         <View style={{ marginTop: -300, alignItems: 'center' }}>
             <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-Bold', fontSize: 32 }}>Notes</Text>
-            <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-Bold', fontSize: 20, paddingTop: 40, paddingHorizontal: 50, justifyContent: 'center'}}>Used to take notes on learning</Text>
-            <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-Bold', fontSize: 20, paddingHorizontal: 50, justifyContent: 'center'}}> materials.</Text>
+            <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-Bold', fontSize: 20, paddingTop: 40, paddingHorizontal: 50, justifyContent: 'center' }}>Used to take notes on learning</Text>
+            <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-Bold', fontSize: 20, paddingHorizontal: 50, justifyContent: 'center' }}> materials.</Text>
             <View style={{ paddingTop: 80, paddingLeft: 260 }}>
                 <TouchableOpacity
                     onPress={() => { navigation.navigate('getstarted') }}>

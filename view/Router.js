@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack" 
+import { createStackNavigator } from "@react-navigation/stack"
 import Login from './Login'
 import Register from './Register'
 import Home from './Home'
@@ -31,7 +31,7 @@ const Stack = createStackNavigator()
 export default function Router() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode='none' initialRouteName='splashscreen'>
+      <Stack.Navigator headerMode='none' initialRouteName='spalshscreen'>
         <Stack.Screen name='splashscreen' component={SplashScreen}>
 
         </Stack.Screen>
@@ -68,7 +68,7 @@ export default function Router() {
         </Stack.Screen>
 
         <Stack.Screen name='profile' component={Profile}>
-           
+
         </Stack.Screen>
 
         <Stack.Screen name='createpost' component={CreatePost}>
@@ -107,7 +107,7 @@ export default function Router() {
 
         </Stack.Screen>
 
-        <Stack.Screen name='likedposts'component={LikedPosts}>
+        <Stack.Screen name='likedposts' component={LikedPosts}>
 
         </Stack.Screen>
 

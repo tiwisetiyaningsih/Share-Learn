@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, StatusBar, ScrollView } from 'react-native'
+import { Text, View, Image, StyleSheet, StatusBar, ScrollView, Modal, Pressable } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from "react-native-gesture-handler";
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -7,20 +7,63 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Octicons from 'react-native-vector-icons/Octicons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 
 
 export class Home extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            openModal: false,
+        }
+    }
+
+    OpenModal = () => {
+        this.setState({ openModal: true })
+    }
+
+    CloseModal = () => {
+        this.setState({ openModal: false })
+    }
+
     render() {
         return (
             <View style={style.home}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
                 <Header navigation={this.props.navigation}></Header>
                 <ScrollView>
-                    <PostRecommentPdf navigation={this.props.navigation}></PostRecommentPdf>
-                    <PostRecommentImage navigation={this.props.navigation}></PostRecommentImage>
+                    <PostRecommentPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostRecommentPdf>
+                    <PostRecommentImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostRecommentImage>
                 </ScrollView>
                 <Fouter navigation={this.props.navigation}></Fouter>
+                <Modal visible={this.state.openModal} transparent>
+                    <View style={{
+                        flex: 1, paddingHorizontal: 30, alignItems: 'center', justifyContent: 'center',
+                        backgroundColor: 'rgba(80,80,80,.2)'
+                    }}>
+                        <View style={{ backgroundColor: "#FFF", padding: 5, minWidth: 150, elevation: 2, borderRadius: 10 }}>
+                            <Pressable style={{ paddingVertical: 5, justifyContent: 'flex-end', alignItems: 'flex-end', borderBottomColor:'#AAA', borderBottomWidth:.5 }} android_ripple={{ color: '#FFDDDD' }}
+                                onPress={() => { this.CloseModal() }}>
+                                <Ionicons name='ios-close' size={15} color='#000'style={{paddingHorizontal: 8}}></Ionicons>
+                            </Pressable>
+                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center', marginTop: 5}} android_ripple={{ color: '#FFDDDD' }}
+                                onPress={() => { this.CloseModal(this.props.navigation.navigate('editpost')) }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: -10 }}>
+                                    <FontAwesome5 name='pencil-alt' size={18} color='#FF8C00'></FontAwesome5>
+                                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black', paddingStart: 9 }}>Edit</Text>
+                                </View>
+                            </Pressable>
+                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
+                                onPress={() => { this.CloseModal() }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <MaterialCommunityIcons name='delete-forever' size={25} color='#C62828'></MaterialCommunityIcons>
+                                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black', paddingStart: 5 }}>Delete</Text>
+                                </View>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         )
     }
@@ -77,7 +120,7 @@ const Header = ({ navigation }) => (
     </View>
 )
 
-const PostRecommentPdf = ({ navigation }) => (
+const PostRecommentPdf = ({ navigation, OpenModal }) => (
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -90,7 +133,10 @@ const PostRecommentPdf = ({ navigation }) => (
                     <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>25 April 2022, 10.05</Text>
                 </View>
             </View>
-            <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+            <Pressable android_ripple={{ color: '#FFDDDD' }}
+                onPress={() => { OpenModal() }}>
+                <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+            </Pressable>
         </View>
         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas XI  - Peluang Kejadian  Part 2</Text>
         <View style={{ backgroundColor: '#FFF', paddingTop: 20, borderLeftColor: '#DADADA', borderLeftWidth: .5, borderRightColor: '#DADADA', borderRightWidth: .5, borderTopColor: '#DADADA', borderTopWidth: .5 }}>
@@ -105,27 +151,27 @@ const PostRecommentPdf = ({ navigation }) => (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{padding:5}}>
+                    <BaseButton style={{ padding: 5 }}>
                         <AntDesign name='staro' size={20} color='black'></AntDesign>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
                 <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{padding:5}}
-                    onPress={()=>{navigation.navigate('comment')}}>
+                    <BaseButton style={{ padding: 5 }}
+                        onPress={() => { navigation.navigate('comment') }}>
                         <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
             </View>
-            <BaseButton style={{padding: 5}}>
+            <BaseButton style={{ padding: 5 }}>
                 <Octicons name='download' size={20} color='black'></Octicons>
             </BaseButton>
         </View>
     </View>
 )
 
-const PostRecommentImage = ({ navigation }) => (
+const PostRecommentImage = ({ navigation, OpenModal }) => (
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -138,29 +184,32 @@ const PostRecommentImage = ({ navigation }) => (
                     <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>25 April 2022, 10.05</Text>
                 </View>
             </View>
-            <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+            <Pressable android_ripple={{ color: '#FFDDDD' }}
+                onPress={() => { OpenModal() }}>
+                <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+            </Pressable>
         </View>
         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas 11  - Rumus Peluang Kejadian</Text>
         <View style={{ alignItems: 'center' }}>
-            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 200}}></Image>
+            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 200 }}></Image>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{padding:5}}>
+                    <BaseButton style={{ padding: 5 }}>
                         <AntDesign name='staro' size={20} color='black'></AntDesign>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
                 <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{padding:5}}
-                    onPress={()=>{navigation.navigate('comment')}}>
+                    <BaseButton style={{ padding: 5 }}
+                        onPress={() => { navigation.navigate('comment') }}>
                         <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
                 </View>
             </View>
-            <BaseButton style={{padding:5}}>
+            <BaseButton style={{ padding: 5 }}>
                 <Octicons name='download' size={20} color='black'></Octicons>
             </BaseButton>
         </View>

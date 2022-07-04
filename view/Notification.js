@@ -33,7 +33,7 @@ const Header = ({ navigation }) => (
 )
 
 const ListnNotif = () => (
-    <View style={{ padding: 20, backgroundColor: '#FFF' }}>
+    <View style={{ padding: 20, backgroundColor: '#FFF', borderBottomColor: '#EEE', borderBottomWidth: 1 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row' }}>
                 <Image source={require('../assets/logo/user_profile.png')}></Image>

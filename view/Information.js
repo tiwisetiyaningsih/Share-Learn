@@ -26,18 +26,18 @@ const Header = ({ navigation }) => (
 )
 
 const Body = () => (
-  <View style={{ backgroundColor: '#FFF', paddingHorizontal: 30,paddingTop: 30, alignItems: 'center' }}>
-    <View style={{paddingTop: 10}}>
+  <View style={{ backgroundColor: '#FFF', paddingHorizontal: 30, paddingTop: 30, alignItems: 'center' }}>
+    <View style={{ paddingTop: 10 }}>
       <Image source={require('../assets/logo/logo_share_learn.png')}></Image>
     </View>
-    <View style={{paddingHorizontal: 10, paddingVertical: 70, alignItems:'center'}}>
+    <View style={{ paddingHorizontal: 10, paddingVertical: 70, alignItems: 'center' }}>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>Aplikasi share learn merupakan aplikasi</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>yang memiliki beberapa fitur seperti sharing</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>aplikasi  learn, save learn & notes. Aplikasi</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>digunakan untuk berbagi / sharing tentang</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>materi pembelajaran.</Text>
     </View>
-    <View style={{paddingTop: 15}}>
+    <View style={{ paddingTop: 15 }}>
       <Image source={require('../assets/logo/blue.png')}></Image>
     </View>
   </View>

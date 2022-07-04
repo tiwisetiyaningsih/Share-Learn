@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, Image, TextInput, StyleSheet, TouchableOpacity  } from 'react-native'
+import { Text, View, StatusBar, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BaseButton } from 'react-native-gesture-handler'
@@ -16,7 +16,7 @@ export class Login extends Component {
   }
 }
 
-const BodyLogin = ({navigation}) => (
+const BodyLogin = ({ navigation }) => (
   <View style={{ elevation: 10 }}>
     <Image source={require('../assets/logo/share-learn-login.png')}></Image>
     <View style={{ paddingHorizontal: 40, elevation: 10 }}>
@@ -31,19 +31,19 @@ const BodyLogin = ({navigation}) => (
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Username</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your username' style={{ paddingStart: 10, marginEnd: 10}}></TextInput>
+            <TextInput placeholder='Your username' style={{ paddingStart: 10, marginEnd: 10 }}></TextInput>
           </View>
         </View>
         <View style={{ paddingTop: 10, paddingHorizontal: 20 }}>
           <Text style={{ fontFamily: 'Inter-Regular', fontSize: 14, color: 'black', paddingBottom: 5 }}>Password</Text>
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account-lock' size={20}></MaterialCommunityIcons>
-            <TextInput placeholder='Your password' style={{ paddingStart: 10, marginEnd: 10}} secureTextEntry></TextInput>
+            <TextInput placeholder='Your password' style={{ paddingStart: 10, marginEnd: 10 }} secureTextEntry></TextInput>
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
           <TouchableOpacity
-          onPress={()=>{navigation.navigate('home')}}>
+            onPress={() => { navigation.navigate('home') }}>
             <Image source={require('../assets/images/btn-login.png')}></Image>
           </TouchableOpacity>
         </View>
@@ -51,9 +51,9 @@ const BodyLogin = ({navigation}) => (
     </View>
     <View style={{ alignItems: 'center' }}>
       <BaseButton style={{ flexDirection: 'row', marginVertical: 8 }}
-      onPress={()=>{navigation.navigate('register')}}>
+        onPress={() => { navigation.navigate('register') }}>
         <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#000' }}>Not Registered?</Text>
-        <Text style={{ fontFamily: 'Inter-Bold', fontSize: 12, color: '#FF8C00', paddingStart: 2}}>Sign Up</Text>
+        <Text style={{ fontFamily: 'Inter-Bold', fontSize: 12, color: '#FF8C00', paddingStart: 2 }}>Sign Up</Text>
       </BaseButton>
     </View>
   </View>

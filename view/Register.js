@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, StyleSheet,ScrollView,Image,TextInput, TouchableOpacity  } from 'react-native'
+import { Text, View, StatusBar, StyleSheet, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from 'react-native-gesture-handler'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -18,8 +18,8 @@ export class Register extends Component {
   }
 }
 
-const BodyRegister = ({navigation}) => (
-  <View style={{paddingBottom: 50}}>
+const BodyRegister = ({ navigation }) => (
+  <View style={{ paddingBottom: 50 }}>
     <Image source={require('../assets/logo/share-learn-login.png')}></Image>
     <View style={{ paddingHorizontal: 40, elevation: 10 }}>
       <View style={{ alignItems: 'center', paddingVertical: 15 }}>
@@ -66,7 +66,7 @@ const BodyRegister = ({navigation}) => (
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
           <TouchableOpacity
-          onPress={()=>{navigation.navigate('login')}}>
+            onPress={() => { navigation.navigate('login') }}>
             <Image source={require('../assets/images/btn-register.png')}></Image>
           </TouchableOpacity>
         </View>
@@ -74,7 +74,7 @@ const BodyRegister = ({navigation}) => (
     </View>
     <View style={{ alignItems: 'center' }}>
       <BaseButton style={{ flexDirection: 'row', marginVertical: 8 }}
-      onPress={()=>{navigation.navigate('login')}}>
+        onPress={() => { navigation.navigate('login') }}>
         <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#000' }}>Already have account?</Text>
         <Text style={{ fontFamily: 'Inter-Bold', fontSize: 12, color: '#FF8C00', paddingStart: 2 }}>Login</Text>
       </BaseButton>
