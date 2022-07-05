@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, StatusBar, Image, Modal, Pressable } from 'react-native'
+import { Text, View, StyleSheet, StatusBar, Image, Modal, Pressable, AsyncStorage } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton, ScrollView } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -7,6 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import axios from 'axios'
 
 
 
@@ -14,8 +15,29 @@ export class MyPost extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            listUserPost: [],
             openModal: false,
+            user: ''
         }
+    }
+    UNSAFE_componentWillMount = async () => {
+        const value = await AsyncStorage.getItem('users');
+        let Account = JSON.parse(value)
+        let user = Account.data.username
+        this.setState({ user: Account.data.username })
+        console.log('nama user', user)
+
+        console.log('tes', Constant.api_url + 'api/post/read/' + user)
+        axios({
+            method: 'GET',
+            url: Constant.api_url + 'api/post/read/' + user
+        }).then((back) => {
+            console.log('tes', JSON.stringify(back.data, null, 2))
+            this.setState({ listUserPost: back.data.data })
+            
+        }).catch((error) => {
+            console.log("error", error)
+        })
     }
 
     OpenModal = () => {
@@ -33,6 +55,10 @@ export class MyPost extends Component {
                 <StatusBar backgroundColor={'#38C6C6'} barStyle='light-content'></StatusBar>
                 <Header navigation={this.props.navigation}></Header>
                 <ScrollView>
+                    {this.state.listUserPost.map((item, index) => {
+                        console.log(item, index)
+                        return <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal} key={index} data={item}></PostPdf>
+                    })}
                     <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
                     <PostImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostImage>
                     <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
@@ -83,7 +109,7 @@ const Header = ({ navigation }) => (
     </View>
 )
 
-const PostPdf = ({ navigation, OpenModal }) => (
+const PostPdf = ({ navigation, OpenModal, data}) => (
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -92,8 +118,8 @@ const PostPdf = ({ navigation, OpenModal }) => (
                     <Image source={require('../assets/logo/user_profile.png')}></Image>
                 </BaseButton>
                 <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Username</Text>
-                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>25 April 2022, 10.05</Text>
+                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>{data.user_post}</Text>
+                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>{data.created_at}</Text>
                 </View>
             </View>
             <Pressable android_ripple={{ color: '#FFDDDD' }}
@@ -101,13 +127,13 @@ const PostPdf = ({ navigation, OpenModal }) => (
                 <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
             </Pressable>
         </View>
-        <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas XI  - Peluang Kejadian  Part 2</Text>
+        <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>{data.sub_judul_post}</Text>
         <View style={{ backgroundColor: '#FFF', paddingTop: 20, borderLeftColor: '#DADADA', borderLeftWidth: .5, borderRightColor: '#DADADA', borderRightWidth: .5, borderTopColor: '#DADADA', borderTopWidth: .5 }}>
             <View style={{ backgroundColor: '#C00000', borderBottomColor: '#7F7F7F', borderBottomWidth: 5, borderTopColor: '#7F7F7F', borderTopWidth: 5, paddingVertical: 20, alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'Itim-Regular', fontSize: 20, color: '#FFF' }}>Peluang Kejadian</Text>
+                <Text style={{ fontFamily: 'Itim-Regular', fontSize: 20, color: '#FFF' }}>{data.judul_post}</Text>
             </View>
             <View style={{ backgroundColor: '#FFF', alignItems: 'center', borderLeftColor: '#DADADA', borderLeftWidth: .5, borderRightColor: '#DADADA', borderRightWidth: .5 }}>
-                <Text style={{ fontFamily: 'Inder-Regular', fontSize: 12, color: 'black', paddingTop: 20, paddingBottom: 10 }}>Materi  Kelas XI  - Peluang Kejadian  Part 2</Text>
+                <Text style={{ fontFamily: 'Inder-Regular', fontSize: 12, color: 'black', paddingTop: 20, paddingBottom: 10 }}>{data.sub_judul_post}</Text>
             </View>
             <Image source={require('../assets/images/pdf.png')} style={{ width: 371.5, height: 42.5 }}></Image>
         </View>

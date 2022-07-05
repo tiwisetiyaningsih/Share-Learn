@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, StatusBar, ScrollView, Modal, Pressable } from 'react-native'
+import { Text, View, Image, StyleSheet, StatusBar, ScrollView, Modal, Pressable, AsyncStorage } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from "react-native-gesture-handler";
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -16,7 +16,16 @@ export class Home extends Component {
         super(props)
         this.state = {
             openModal: false,
+            user: ''
         }
+    }
+
+    UNSAFE_componentWillMount = async () => {
+        const value = await AsyncStorage.getItem('users');
+        let Home = JSON.parse(value)
+        let user = Home.data.username
+        this.setState({ user: Home.data.username })
+        console.log ('nama user', user)
     }
 
     OpenModal = () => {
@@ -31,7 +40,7 @@ export class Home extends Component {
         return (
             <View style={style.home}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-                <Header navigation={this.props.navigation}></Header>
+                <Header navigation={this.props.navigation} user={this.state.user}></Header>
                 <ScrollView>
                     <PostRecommentPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostRecommentPdf>
                     <PostRecommentImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostRecommentImage>
@@ -69,7 +78,7 @@ export class Home extends Component {
     }
 }
 
-const Header = ({ navigation }) => (
+const Header = ({ navigation, user }) => (
     <View style={{ backgroundColor: '#FFF' }}>
         <View style={{ backgroundColor: '#FFF', flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 30, justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -79,7 +88,7 @@ const Header = ({ navigation }) => (
                 </BaseButton>
                 <View style={{ flexDirection: 'row', paddingStart: 10 }}>
                     <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: 'black' }}>Hallo,</Text>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#38C6C6', paddingStart: 2 }}>Username</Text>
+                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#38C6C6', paddingStart: 2 }}>{user}</Text>
                     <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#FF8C00' }}>!</Text>
                 </View>
             </View>

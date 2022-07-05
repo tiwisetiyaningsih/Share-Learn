@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BaseButton } from 'react-native-gesture-handler'
 import Constant from '../Componen/Constant'
+import axios from 'axios'
 
 
 
@@ -15,7 +16,7 @@ export class Login extends Component {
     }
   }
 
-  Login = async () => {
+  Loginapp = async () => {
     // this.props.navigation.navigate('home')
     // return 
     const { Username, Password } = this.state
@@ -36,7 +37,7 @@ export class Login extends Component {
       let LoginUsers = back.data
       await AsyncStorage.setItem("users", JSON.stringify(LoginUsers))
 
-      // console.log(back.data)
+    //  console.log('backData', back.data)
       if (back.status === 200 && back.data.message === "data falid") {
         console.log("hello")
         const value = await AsyncStorage.getItem('users');
@@ -66,13 +67,13 @@ export class Login extends Component {
     return (
       <View style={style.app}>
         <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-        <BodyLogin navigation={this.props.navigation} Login={this.Login()} SetUsername={(text) => { this.SetUsername(text) }} SetPassword={(text) => {this.SetPassword(text)}}></BodyLogin>
+        <BodyLogin navigation={this.props.navigation}  SetUsername={(text) => { this.SetUsername(text) }} SetPassword={(text) => {this.SetPassword(text)}} Loginapp={()=>{this.Loginapp()}} Username={this.state.Username} Password={this.state.Password}></BodyLogin>
       </View>
     )
   }
 }
 
-const BodyLogin = ({ navigation, Login, Username, Password, SetUsername, SetPassword }) => (
+const BodyLogin = ({ navigation, Loginapp, Username, Password, SetUsername, SetPassword }) => (
   <View style={{ elevation: 10 }}>
     <Image source={require('../assets/logo/share-learn-login.png')}></Image>
     <View style={{ paddingHorizontal: 40, elevation: 10 }}>
@@ -107,7 +108,7 @@ const BodyLogin = ({ navigation, Login, Username, Password, SetUsername, SetPass
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>
           <TouchableOpacity
-            onPress={() => { Login() }}>
+            onPress={() => { Loginapp() }}>
             <Image source={require('../assets/images/btn-login.png')}></Image>
           </TouchableOpacity>
         </View>

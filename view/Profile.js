@@ -1,4 +1,4 @@
-import { Text, View, Image, StatusBar, StyleSheet, ScrollView } from 'react-native'
+import { Text, View, Image, StatusBar, StyleSheet, ScrollView, AsyncStorage } from 'react-native'
 import React, { Component } from 'react'
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -8,12 +8,37 @@ import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export class Profile extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      user: '',
+      nis: '',
+      fullname:''
+    }
+  }
+
+  UNSAFE_componentWillMount = async () => {
+    const value = await AsyncStorage.getItem('users');
+    let Account = JSON.parse(value)
+    let fullname = Account.data.username
+    this.setState({ fullname: Account.data.fullname })
+    console.log('fullname user', fullname)
+    let nis = Account.data.nis
+    this.setState({ nis: Account.data.nis })
+    console.log('nis user', nis)
+    let user = Account.data.username
+    this.setState({ user: Account.data.username })
+    console.log ('nama user', user)
+
+  }
+
+
   render() {
     return (
       <View style={style.app}>
         <StatusBar backgroundColor={'#BFFBFB'} barStyle='dark-content'></StatusBar>
         <ScrollView>
-          <Profil navigation={this.props.navigation}></Profil>
+          <Profil navigation={this.props.navigation} fullname={this.state.fullname} nis={this.state.nis}></Profil>
         </ScrollView>
         <Fouter navigation={this.props.navigation}></Fouter>
       </View>
@@ -21,7 +46,7 @@ export class Profile extends Component {
   }
 }
 
-const Profil = ({ navigation }) => (
+const Profil = ({ navigation, fullname, nis }) => (
   <View>
     <Image source={require('../assets/images/header_profile.png')}></Image>
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, flexDirection: 'row' }}>
@@ -29,8 +54,8 @@ const Profil = ({ navigation }) => (
         <Image source={require('../assets/images/users_profile.png')} style={{ position: 'absolute' }}></Image>
       </View>
       <View style={{ flexDirection: 'column', paddingVertical: 10 }}>
-        <Text style={{ paddingHorizontal: 10, marginTop: -44, fontFamily: 'Inter-SemiBold', fontSize: 20, color: 'black' }}>Username</Text>
-        <Text style={{ paddingHorizontal: 10, paddingTop: 12, fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>3103120222</Text>
+        <Text style={{ paddingHorizontal: 10, marginTop: -44, fontFamily: 'Inter-SemiBold', fontSize: 20, color: 'black' }}>{fullname}</Text>
+        <Text style={{ paddingHorizontal: 10, paddingTop: 12, fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>{nis}</Text>
       </View>
     </View>
     <View style={{ paddingHorizontal: 20, paddingTop: 30 }}>
