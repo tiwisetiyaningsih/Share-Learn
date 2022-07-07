@@ -146,7 +146,7 @@ const FormEditPost = ({ navigation, OpenModal, OpenModal1 }) => (
                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000', paddingHorizontal: 10, minHeight: 50 }}>Input materi</Text>
             </Pressable>
             <BaseButton>
-                <Image source={require('../assets/images/image-post.png')}></Image>
+                <Image source={require('../assets/images/image-post.png')} style={{width: 300, height:150 }}></Image>
             </BaseButton>
         </View>
     </View>

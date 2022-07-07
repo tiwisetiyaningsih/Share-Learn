@@ -1,20 +1,54 @@
-import { Text, View, Image, StatusBar, ScrollView, StyleSheet } from 'react-native'
+import { Text, View, Image, StatusBar, ScrollView, StyleSheet, AsyncStorage } from 'react-native'
 import React, { Component } from 'react'
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { BaseButton } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import axios from 'axios'
 
 
 export class Notes extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      openModal: false,
+      user: '',
+      listNotes: []
+    }
+  }
+
+  UNSAFE_componentWillMount = async () => {
+    const value = await AsyncStorage.getItem('users');
+    let Account = JSON.parse(value)
+    let user = Account.data.username
+    this.setState({ user: Account.data.username })
+    console.log('nama user', user)
+
+    axios({
+      method: 'GET',
+      url: Constant.api_url + 'api/notes/read/' + user
+    }).then((back) => {
+      console.log(JSON.stringify(back.data, null, 2))
+      let listNotes = back.data.data.reverse()
+      this.setState({ listNotes: back.data.data.reverse() })
+      console.log('listNotes', listNotes)
+    }).catch((error) => {
+      console.log("error", error)
+    })
+  }
+
   render() {
     return (
       <View style={style.app}>
         <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
         <Header navigation={this.props.navigation}></Header>
         <ScrollView>
-          <ListNotes navigation={this.props.navigation}></ListNotes>
+          {this.state.listNotes.map((item, index) => {
+            console.log('yyy', item, index)
+            return <ListNotes navigation={this.props.navigation} key={index} data={item}></ListNotes>
+          })}
         </ScrollView>
         <Fouter navigation={this.props.navigation}></Fouter>
       </View>
@@ -24,7 +58,7 @@ export class Notes extends Component {
 
 const Header = ({ navigation }) => (
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
-    <BaseButton style={{padding:5}}
+    <BaseButton style={{ padding: 5 }}
       onPress={() => { navigation.navigate('home') }}>
       <Octicons name='chevron-left' size={25} color='black'></Octicons>
     </BaseButton>
@@ -36,12 +70,19 @@ const Header = ({ navigation }) => (
   </View>
 )
 
-const ListNotes = ({ navigation }) => (
-  <View style={{ flexDirection: 'row', paddingHorizontal: 30, justifyContent: 'space-between', paddingVertical: 15, borderBottomColor: '#DADADA', borderBottomWidth: 1 }}>
-    <BaseButton style={{ flexDirection: 'column', paddingRight: 200, paddingVertical: 5 }}
-      onPress={() => { navigation.navigate('detailnotes') }}>
-      <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: 'black' }}>Matematika</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: 'black' }}>Bab Logika Matematika</Text>
+const ListNotes = ({ navigation, data }) => (
+  <View style={{ flexDirection: 'row', paddingHorizontal: 25, justifyContent: 'space-between', paddingVertical: 15, borderBottomColor: '#DADADA', borderBottomWidth: 1 }}>
+    <BaseButton style={{ flexDirection: 'column', paddingVertical: 5 }}
+      onPress={() => {
+        let kirim = {
+          data
+        }
+        navigation.navigate('detailnotes', kirim)
+      }}>
+      <View style={{width:300}}>
+        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: 'black' }}>{data.judul_notes}</Text>
+        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: 'black' }}>{data.sub_judul_notes}</Text>
+      </View>
     </BaseButton>
     <BaseButton style={{ marginBottom: 20, padding: 5 }}>
       <Ionicons name='ellipsis-horizontal' size={20} color='black'></Ionicons>

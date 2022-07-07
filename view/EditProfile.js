@@ -8,6 +8,7 @@ export class EditProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
+        id_user:'',
         user: '',
         nis: '',
         fullname: ''

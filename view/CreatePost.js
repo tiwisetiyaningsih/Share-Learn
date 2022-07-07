@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, StatusBar, Modal, Pressable } from 'react-native'
+import { Text, View, StyleSheet, Image, TextInput, StatusBar, Modal, Pressable, AsyncStorage } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -12,8 +12,20 @@ export class CreatePost extends Component {
         super(props)
         this.state = {
             openModal: false,
-            openModal1: false
+            openModal1: false,
+            mapel: 'Learn?',
+            judul:'',
+            sub_judul:'',
+            file:'',
+            user:''
         }
+    }
+
+    componentWillMount = async () => {
+        const value = await AsyncStorage.getItem('users');
+        let Account = JSON.parse(value)
+        console.log(Account.data.name)
+        this.setState({ user: Account.data.name })
     }
 
     OpenModal = () => {
@@ -32,12 +44,25 @@ export class CreatePost extends Component {
         this.setState({ openModal1: false })
     }
 
+    MapelPost = (value) => {
+        this.setState({ mapel: value })
+    }
+
+    SetJudul = (text) => {
+        this.setState({judul: text})
+    }
+    SetSubJudul = (text) => {
+        this.setState({sub_judul: text})
+    }
+
     render() {
         return (
             <View style={style.app}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
                 <Header navigation={this.props.navigation}> </Header>
-                <FormPost navigation={this.props.navigation} OpenModal={this.OpenModal} OpenModal1={this.OpenModal1}></FormPost>
+                <FormPost navigation={this.props.navigation} OpenModal={this.OpenModal} OpenModal1={this.OpenModal1} mapel={this.state.mapel}
+                judul={this.state.judul} sub_judul={this.state.sub_judul} file={this.state.file} SetJudul={(text) => { this.SetJudul(text) }}
+                SetSubJudul={(text) => { this.SetSubJudul(text) }}></FormPost>
                 <Modal visible={this.state.openModal1} transparent>
                     <View style={{
                         flex: 1, paddingHorizontal: 50, marginTop: -230, alignItems: 'flex-start', justifyContent: 'center',
@@ -46,27 +71,27 @@ export class CreatePost extends Component {
                         <View style={{ backgroundColor: "#FFF", padding: 8, minWidth: 100, elevation: 2, borderRadius: 10, alignItems: 'center' }}>
                             <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Matematika')) }}>
                                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Matematika</Text>
                             </Pressable>
                             <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Kimia')) }}>
                                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Kimia</Text>
                             </Pressable>
                             <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Fisika')) }}>
                                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Fisika</Text>
                             </Pressable>
                             <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('B.indonesia')) }}>
                                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>B.Indonesia</Text>
                             </Pressable>
                             <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('B.Inggris')) }}>
                                 <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>B.Inggris</Text>
                             </Pressable>
                         </View>
@@ -115,7 +140,7 @@ const Header = ({ navigation }) => (
     </View>
 )
 
-const FormPost = ({ navigation, OpenModal, OpenModal1 }) => (
+const FormPost = ({ navigation, OpenModal, OpenModal1, mapel, judul, sub_judul, file, SetJudul, SetSubJudul }) => (
     <View style={{ paddingHorizontal: 30, marginTop: 20 }}>
         <BaseButton style={{ marginEnd: 200 }}
             onPress={() => { navigation.navigate('profile') }}>
@@ -130,16 +155,22 @@ const FormPost = ({ navigation, OpenModal, OpenModal1 }) => (
                 <MaterialIcons name='category' size={20} color='#000'></MaterialIcons>
             </Pressable>
             <View style={{ backgroundColor: '#38C6C6', marginLeft: 10, borderRadius: 5, minWidth: 80, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 }}>
-                <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#FFF' }}>Learn?</Text>
+                <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#FFF' }}>{mapel}</Text>
             </View>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
             <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Judul</Text>
-            <TextInput placeholder='What do you think?' style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}></TextInput>
+            <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
+            placeholder='What do you think?'
+            value={judul}
+            onChangeText={(text) => { SetJudul(text) }}></TextInput>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
             <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Sub Judul</Text>
-            <TextInput placeholder='What do you think?' style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}></TextInput>
+            <TextInput  style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
+            placeholder='What do you think?'
+            value={sub_judul}
+            onChangeText={(text) => { SetSubJudul(text) }}></TextInput>
         </View>
         <View style={{ flexDirection: 'row', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2, paddingVertical: 15 }}>
             <Pressable style={{ flexDirection: 'row' }}

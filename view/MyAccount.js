@@ -67,7 +67,7 @@ const Body = ({ user, nis, email, fullname }) => (
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 30 }}>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000' }}>Username</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12.5, color: '#A3A3A3' }}>{user}</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12.5, color: '#A3A3A3' }}>@{user}</Text>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 30 }}>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000' }}>Fullname</Text>

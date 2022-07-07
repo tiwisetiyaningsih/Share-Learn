@@ -11,7 +11,6 @@ export class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: '',
       nis: '',
       fullname:''
     }
@@ -20,15 +19,12 @@ export class Profile extends Component {
   UNSAFE_componentWillMount = async () => {
     const value = await AsyncStorage.getItem('users');
     let Account = JSON.parse(value)
-    let fullname = Account.data.username
+    let fullname = Account.data.fullname
     this.setState({ fullname: Account.data.fullname })
     console.log('fullname user', fullname)
     let nis = Account.data.nis
     this.setState({ nis: Account.data.nis })
     console.log('nis user', nis)
-    let user = Account.data.username
-    this.setState({ user: Account.data.username })
-    console.log ('nama user', user)
 
   }
 

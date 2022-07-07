@@ -15,11 +15,12 @@ export class MyPost extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            listUserPost: [],
             openModal: false,
-            user: ''
+            user: '',
+            listPost: []
         }
     }
+
     UNSAFE_componentWillMount = async () => {
         const value = await AsyncStorage.getItem('users');
         let Account = JSON.parse(value)
@@ -27,14 +28,14 @@ export class MyPost extends Component {
         this.setState({ user: Account.data.username })
         console.log('nama user', user)
 
-        console.log('tes', Constant.api_url + 'api/post/read/' + user)
         axios({
             method: 'GET',
-            url: Constant.api_url + 'api/post/read/' + user
+            url: Constant.api_url + 'api/post/read/' + user 
         }).then((back) => {
-            console.log('tes', JSON.stringify(back.data, null, 2))
-            this.setState({ listUserPost: back.data.data })
-            
+            console.log(JSON.stringify(back.data, null, 2))
+            let listPost = back.data.data.reverse()
+            this.setState({ listPost: back.data.data.reverse() })
+            console.log('listPost', listPost)
         }).catch((error) => {
             console.log("error", error)
         })
@@ -55,15 +56,11 @@ export class MyPost extends Component {
                 <StatusBar backgroundColor={'#38C6C6'} barStyle='light-content'></StatusBar>
                 <Header navigation={this.props.navigation}></Header>
                 <ScrollView>
-                    {this.state.listUserPost.map((item, index) => {
-                        console.log(item, index)
+                    {this.state.listPost.map((item, index) => {
+                        console.log('yyy', item, index)
                         return <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal} key={index} data={item}></PostPdf>
                     })}
-                    <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
                     <PostImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostImage>
-                    <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
-                    <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
-                    <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal}></PostPdf>
                     <PostImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostImage>
                 </ScrollView>
                 <Fouter navigation={this.props.navigation}></Fouter>
@@ -109,7 +106,7 @@ const Header = ({ navigation }) => (
     </View>
 )
 
-const PostPdf = ({ navigation, OpenModal, data}) => (
+const PostPdf = ({ navigation, OpenModal, data }) => (
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -143,14 +140,14 @@ const PostPdf = ({ navigation, OpenModal, data}) => (
                     <BaseButton style={{ padding: 5 }}>
                         <AntDesign name='staro' size={20} color='black'></AntDesign>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_like}</Text>
                 </View>
                 <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <BaseButton style={{ padding: 5 }}
                         onPress={() => { navigation.navigate('comment') }}>
                         <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_comment}</Text>
                 </View>
             </View>
             <BaseButton style={{ padding: 5 }}>
@@ -163,7 +160,7 @@ const PostPdf = ({ navigation, OpenModal, data}) => (
 
 const PostImage = ({ navigation, OpenModal }) => (
     <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
             <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 <BaseButton
                     onPress={() => { navigation.navigate('profile') }}>
@@ -181,7 +178,7 @@ const PostImage = ({ navigation, OpenModal }) => (
         </View>
         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas 11  - Rumus Peluang Kejadian</Text>
         <View style={{ alignItems: 'center' }}>
-            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 200 }}></Image>
+            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 370 }}></Image>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
