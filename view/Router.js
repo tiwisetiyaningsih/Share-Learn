@@ -31,7 +31,7 @@ const Stack = createStackNavigator()
 export default function Router() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode='none' initialRouteName='spalshscreen'>
+      <Stack.Navigator headerMode='none' initialRouteName='splashscreen'>
         <Stack.Screen name='splashscreen' component={SplashScreen}>
 
         </Stack.Screen>

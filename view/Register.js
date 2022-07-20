@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, StyleSheet, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, StatusBar, StyleSheet, ScrollView, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from 'react-native-gesture-handler'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -44,6 +44,9 @@ export class Register extends Component {
         this.props.navigation.navigate('login')
       } else {
         Alert.alert("Gagal", back.data.message)
+      } 
+      if (back.status === 200 && back.data.message === "username telah terpakai") {
+        Alert.alert("Gagal", back.data.message )
       }
     })
   }

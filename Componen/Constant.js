@@ -1,3 +1,3 @@
 export default Constant = {
-    api_url : 'http://192.168.0.115:8080/'
+    api_url : 'http://192.168.0.103:8080/'
 } 

@@ -23,12 +23,14 @@ export class Notification extends Component {
 }
 
 const Header = ({ navigation }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 30, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#FFF' }}>
-        <BaseButton style={{ padding: 5, marginLeft: -140 }}
+    <View style={{ flexDirection: 'row', paddingHorizontal: 25, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#FFF' }}>
+        <BaseButton style={{ padding: 5, justifyContent: 'flex-start' }}
             onPress={() => { navigation.navigate('home') }}>
             <Octicons name='chevron-left' size={25} color='#000' ></Octicons>
         </BaseButton>
-        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#000', justifyContent: 'center', marginLeft: -10 }}>Notification</Text>
+        <View style={{ alignItems: 'center', flex: 1 }}>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#000', justifyContent: 'center', marginLeft: -10 }}>Notification</Text>
+        </View>
     </View>
 )
 
@@ -38,15 +40,17 @@ const ListnNotif = () => (
             <View style={{ flexDirection: 'row' }}>
                 <Image source={require('../assets/logo/user_profile.png')}></Image>
                 <View style={{ flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000', paddingStart: 10 }}>Usernm_1,</Text>
-                        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', paddingHorizontal: 3 }}>Baru saja posting</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#38C6C6', paddingStart: 10 }}>Usernm_1,</Text>
+                        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#000', paddingHorizontal: 3 }}>Baru saja posting</Text>
                     </View>
                     <Text style={{ fontFamily: 'Inter-Regular', fontSize: 10, color: '#000', paddingStart: 10 }}>25 April 2022, 10.05</Text>
                 </View>
             </View>
-            <BaseButton style={{ padding: 5 }}>
-                <Ionicons name='close' size={15} color='#000'></Ionicons>
+            <BaseButton style={{ marginBottom:10 }}>
+                <View style={{padding: 5 }}>
+                    <Ionicons name='close' size={15} color='#000'></Ionicons>
+                </View>
             </BaseButton>
         </View>
     </View>

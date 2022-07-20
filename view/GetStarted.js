@@ -1,5 +1,6 @@
 import { Text, View, StatusBar, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
+import { CommonActions } from '@react-navigation/native'
 
 export class GetStarted extends Component {
   render() {
@@ -20,7 +21,18 @@ const Getstarted = ({ navigation }) => (
       <Text style={{ color: '#0E7E7E', fontFamily: 'Inter-Bold', fontSize: 32, paddingBottom: 110 }}>to learn ?</Text>
     </View>
     <View style={{ alignItems: 'flex-end', marginTop: -110 }}>
-      <TouchableOpacity onPress={() => { navigation.navigate('login') }}>
+      <TouchableOpacity onPress={() => { 
+        navigation.dispatch(
+          CommonActions.reset({
+              index: 0, 
+              routes: [
+                  {
+                      name:'login'
+                  }
+              ]
+          })
+      )
+       }}>
         <Image source={require('../assets/images/btn-getstarted.png')} ></Image>
       </TouchableOpacity>
     </View>

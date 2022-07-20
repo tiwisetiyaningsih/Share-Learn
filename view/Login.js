@@ -4,6 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { BaseButton } from 'react-native-gesture-handler'
 import Constant from '../Componen/Constant'
 import axios from 'axios'
+import { CommonActions } from '@react-navigation/native'
 
 
 
@@ -34,15 +35,23 @@ export class Login extends Component {
       url: Constant.api_url + 'api/user/login',
       data: postData
     }).then(async (back) => {
-      let LoginUsers = back.data
-      await AsyncStorage.setItem("users", JSON.stringify(LoginUsers))
+      // let LoginUsers = back.data
+      // await AsyncStorage.setItem("users", JSON.stringify(LoginUsers))
 
     //  console.log('backData', back.data)
       if (back.status === 200 && back.data.message === "data falid") {
-        console.log("hello")
-        const value = await AsyncStorage.getItem('users');
-        console.log("dari asyncStorage", value)
-        this.props.navigation.navigate('home')
+        
+        await AsyncStorage.setItem("users", JSON.stringify(back.data))
+        this.props.navigation.dispatch(
+          CommonActions.reset({
+              index: 0, 
+              routes: [
+                  {
+                      name:'home'
+                  }
+              ]
+          })
+      )
         this.setState({ Username: '', Password: '' })
       } else {
         Alert.alert("Gagal", back.data.message)

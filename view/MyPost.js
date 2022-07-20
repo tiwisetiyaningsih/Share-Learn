@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, StatusBar, Image, Modal, Pressable, AsyncStorage } from 'react-native'
+import { Text, View, StyleSheet, StatusBar, Image, Modal, Pressable, AsyncStorage, Alert } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton, ScrollView } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from 'axios'
+import Feather from 'react-native-vector-icons/Feather'
 
 
 
@@ -17,7 +18,8 @@ export class MyPost extends Component {
         this.state = {
             openModal: false,
             user: '',
-            listPost: []
+            listPost: [],
+            listLike: []
         }
     }
 
@@ -30,7 +32,7 @@ export class MyPost extends Component {
 
         axios({
             method: 'GET',
-            url: Constant.api_url + 'api/post/read/' + user 
+            url: Constant.api_url + 'api/post/read/' + user
         }).then((back) => {
             console.log(JSON.stringify(back.data, null, 2))
             let listPost = back.data.data.reverse()
@@ -38,6 +40,54 @@ export class MyPost extends Component {
             console.log('listPost', listPost)
         }).catch((error) => {
             console.log("error", error)
+        })
+    }
+
+    PostLike = (id) => {
+        const { user } = this.state
+        console.log(user, id)
+
+        let postData =
+        {
+            "user_like": user,
+            "id_post": id
+        }
+        console.log(postData)
+        console.log(Constant.api_url + 'api/like/create')
+
+        axios({
+            method: 'POST',
+            url: Constant.api_url + 'api/like/create',
+            data: postData
+        }).then((back) => {
+
+            console.log(back.data)
+            if (back.status === 200) {
+                if (back.data.massage == 'success like') {
+                    let like_list = this.state.listPost
+                    console.log('like_list', like_list)
+                    like_list.map((item, index) => {
+                        // console.log('like_list index', like_list[index]['jumlah_like']++)
+                        if (item.id == id) { like_list[index]['jumlah_like']++ }
+                    })
+                    this.setState({ listPost: like_list })
+                } else if (back.data.massage == 'success unlike') {
+                    let like_list = this.state.listPost
+                    like_list.map((item, index) => {
+                        // console.log('like_list index', like_list[index]['jumlah_like']--)
+                        if (item.id == id) { like_list[index]['jumlah_like']-- }
+                    })
+                    this.setState({ listPost: like_list })
+                }
+                console.log("hello")
+                let like = this.state.listLike
+                like = [...like, back.data.data]
+                this.setState({ listLike: like })
+            } else {
+                Alert.alert("Gagal", back.data.message)
+            }
+        }).catch((error) => {
+            console.log(error)
         })
     }
 
@@ -49,6 +99,47 @@ export class MyPost extends Component {
         this.setState({ openModal: false })
     }
 
+    DeletePost = (id) => {
+        console.log(id)
+        console.log(Constant.api_url + 'api/post/delete/' + id)
+
+        axios({
+            method: 'GET',
+            url: Constant.api_url + 'api/post/delete/' + id
+        }).then((back) => {
+            console.log(JSON.stringify(back.data, null, 2))
+            if (back.data.massage === 'success') {
+                console.log("hello")
+                Alert.alert("Berhasil", 'Postingan berhasil terhapus', [
+                    {
+                        text: "oke",
+                        style: 'default',
+                        onPress: this.props.navigation.navigate('mypost')
+                    }
+                ])
+
+            } else {
+                Alert.alert("Gagal", 'Postingan gagal terhapus')
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
+
+        const { user } = this.state
+        console.log(user)
+        axios({
+            method: 'GET',
+            url: Constant.api_url + 'api/post/read/' + user
+        }).then((back) => {
+            console.log(JSON.stringify(back.data, null, 2))
+            let listPost = back.data.data.reverse()
+            this.setState({ listPost: back.data.data.reverse() })
+            console.log('listPost', listPost)
+        }).catch((error) => {
+            console.log("error", error)
+        })
+
+    }
 
     render() {
         return (
@@ -58,74 +149,79 @@ export class MyPost extends Component {
                 <ScrollView>
                     {this.state.listPost.map((item, index) => {
                         console.log('yyy', item, index)
-                        return <PostPdf navigation={this.props.navigation} OpenModal={this.OpenModal} key={index} data={item}></PostPdf>
+                        {
+                            if (item.type_file == 'Image') {
+                                return <PostImage navigation={this.props.navigation} key={index} data={item} PostLike={(data) => this.PostLike(data)} DeletePost={(data) => { this.DeletePost(data) }}></PostImage>
+                            } else {
+                                return <PostPdf navigation={this.props.navigation} key={index} data={item} PostLike={(data) => this.PostLike(data)} DeletePost={(data) => { this.DeletePost(data) }}></PostPdf>
+                            }
+                        }
+
                     })}
-                    <PostImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostImage>
-                    <PostImage navigation={this.props.navigation} OpenModal={this.OpenModal}></PostImage>
                 </ScrollView>
                 <Fouter navigation={this.props.navigation}></Fouter>
-                <Modal visible={this.state.openModal} transparent>
-                    <View style={{
-                        flex: 1, paddingHorizontal: 30, alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: 'rgba(80,80,80,.2)'
-                    }}>
-                        <View style={{ backgroundColor: "#FFF", padding: 5, minWidth: 150, elevation: 2, borderRadius: 10 }}>
-                            <Pressable style={{ paddingVertical: 5, justifyContent: 'flex-end', alignItems: 'flex-end', borderBottomColor: '#AAA', borderBottomWidth: .5 }} android_ripple={{ color: '#FFDDDD' }}
-                                onPress={() => { this.CloseModal() }}>
-                                <Ionicons name='ios-close' size={15} color='#000' style={{ paddingHorizontal: 8 }}></Ionicons>
-                            </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center', marginTop: 5 }} android_ripple={{ color: '#FFDDDD' }}
-                                onPress={() => { this.CloseModal(this.props.navigation.navigate('editpost')) }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginStart: -10 }}>
-                                    <FontAwesome5 name='pencil-alt' size={18} color='#FF8C00'></FontAwesome5>
-                                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black', paddingStart: 9 }}>Edit</Text>
-                                </View>
-                            </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
-                                onPress={() => { this.CloseModal() }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <MaterialCommunityIcons name='delete-forever' size={25} color='#C62828'></MaterialCommunityIcons>
-                                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black', paddingStart: 5 }}>Delete</Text>
-                                </View>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Modal>
             </View>
         )
     }
 }
 
 const Header = ({ navigation }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 30, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#38C6C6' }}>
-        <BaseButton style={{ padding: 5, marginLeft: -140 }}
+    <View style={{ flexDirection: 'row', paddingHorizontal: 25, paddingTop: 25, paddingBottom: 15, alignItems: 'center', backgroundColor: '#38C6C6' }}>
+        <BaseButton style={{ padding: 5, justifyContent: 'flex-start' }}
             onPress={() => { navigation.navigate('profile') }}>
             <Octicons name='chevron-left' size={25} color='#FFF' ></Octicons>
         </BaseButton>
-        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#FFF', justifyContent: 'center' }}>My Post</Text>
+        <View style={{ alignItems: 'center', flex: 1, marginStart: -20 }}>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 18, color: '#FFF', justifyContent: 'center' }}>My Post</Text>
+        </View>
     </View>
 )
 
-const PostPdf = ({ navigation, OpenModal, data }) => (
-    <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+const PostPdf = ({ navigation, data, DeletePost }) => (
+    <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingVertical: 15, marginBottom: 4, elevation: 1 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <BaseButton
                     onPress={() => { navigation.navigate('profile') }}>
-                    <Image source={require('../assets/logo/user_profile.png')}></Image>
+                    <Image source={require('../assets/logo/user_profile.png')} style={{ width: 35, height: 35 }}></Image>
                 </BaseButton>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>{data.user_post}</Text>
-                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>{data.created_at}</Text>
-                </View>
+                <Text style={{ fontFamily: 'Inter-Medium', fontSize: 13, color: 'black', paddingHorizontal: 8 }}>{data.user_post}</Text>
             </View>
             <Pressable android_ripple={{ color: '#FFDDDD' }}
-                onPress={() => { OpenModal() }}>
-                <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+                onPress={() => {
+                    {
+                        data.user_post === user
+                            ?
+                            Alert.alert('Modification', 'Are you sure to edit or delete?',
+                                [
+                                    {
+                                        text: 'Yes,edit',
+                                        style: 'default',
+                                        onPress: () => {
+                                            let kirim = {
+                                                data
+                                            }
+                                            navigation.navigate('editpost', kirim)
+                                        }
+                                    },
+                                    {
+                                        text: 'Yes,delete',
+                                        style: 'default',
+                                        onPress: () => { DeletePost(data.id) }
+                                    },
+                                    {
+                                        text: 'Cancel',
+                                        style: 'cancel'
+                                    }
+                                ])
+                            : null
+                    }
+
+                }}>
+                <Entypo name='dots-three-horizontal' size={16} color='black'></Entypo>
             </Pressable>
         </View>
-        <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>{data.sub_judul_post}</Text>
-        <View style={{ backgroundColor: '#FFF', paddingTop: 20, borderLeftColor: '#DADADA', borderLeftWidth: .5, borderRightColor: '#DADADA', borderRightWidth: .5, borderTopColor: '#DADADA', borderTopWidth: .5 }}>
+        <View style={{ backgroundColor: '#FFF', paddingTop: 20, borderLeftColor: '#DADADA', borderLeftWidth: .5, borderRightColor: '#DADADA', borderRightWidth: .5, borderTopColor: '#DADADA', borderTopWidth: .5, marginTop: 10, marginBottom: -2 }}>
             <View style={{ backgroundColor: '#C00000', borderBottomColor: '#7F7F7F', borderBottomWidth: 5, borderTopColor: '#7F7F7F', borderTopWidth: 5, paddingVertical: 20, alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Itim-Regular', fontSize: 20, color: '#FFF' }}>{data.judul_post}</Text>
             </View>
@@ -134,92 +230,141 @@ const PostPdf = ({ navigation, OpenModal, data }) => (
             </View>
             <Image source={require('../assets/images/pdf.png')} style={{ width: 371.5, height: 42.5 }}></Image>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{ padding: 5 }}>
-                        <AntDesign name='staro' size={20} color='black'></AntDesign>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <BaseButton style={{ padding: 5 }}
+                        onPress={() => {
+                            PostLike(data.id)
+                        }}>
+                        <AntDesign name='staro' size={23} color='#000'></AntDesign>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_like}</Text>
                 </View>
-                <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ paddingStart: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <BaseButton style={{ padding: 5 }}
-                        onPress={() => { navigation.navigate('comment') }}>
-                        <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
+                        onPress={() => {
+                            let kirim = {
+                                data
+                            }
+                            navigation.navigate('comment', kirim)
+                        }}>
+                        <Ionicons name='chatbubble-ellipses-outline' size={23} color='black'></Ionicons>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_comment}</Text>
                 </View>
             </View>
             <BaseButton style={{ padding: 5 }}>
-                <Octicons name='download' size={20} color='black'></Octicons>
+                <Feather name='download' size={23} color='black'></Feather>
             </BaseButton>
+        </View>
+        <View style={{ width: 320 }}>
+            <Text style={{ fontFamily: 'Inter-Reguler', fontSize: 12, color: 'black', paddingBottom: 5 }}>{data.sub_judul_post}</Text>
+            <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black', paddingBottom: 15 }}>{data.updated_at}</Text>
         </View>
     </View>
 )
 
 
-const PostImage = ({ navigation, OpenModal }) => (
-    <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingTop: 20, marginBottom: 4, elevation: 1 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+const PostImage = ({ navigation, data, PostLike, DeletePost }) => (
+    <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingVertical: 15, marginBottom: 4, elevation: 1 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <BaseButton
                     onPress={() => { navigation.navigate('profile') }}>
-                    <Image source={require('../assets/logo/user_profile.png')}></Image>
+                    <Image source={require('../assets/logo/user_profile.png')} style={{ width: 35, height: 35 }}></Image>
                 </BaseButton>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Username</Text>
-                    <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>25 April 2022, 10.05</Text>
-                </View>
+                <Text style={{ fontFamily: 'Inter-Medium', fontSize: 13, color: 'black', paddingHorizontal: 8 }}>{data.user_post}</Text>
             </View>
             <Pressable android_ripple={{ color: '#FFDDDD' }}
-                onPress={() => { OpenModal() }}>
-                <Entypo name='dots-three-vertical' size={15} color='black'></Entypo>
+                onPress={() => {
+                    {
+                        data.user_post === user
+                            ?
+                            Alert.alert('Modification', 'Are you sure to edit or delete?',
+                                [
+                                    {
+                                        text: 'Yes,edit',
+                                        style: 'default',
+                                        onPress: () => {
+                                            let kirim = {
+                                                data
+                                            }
+                                            navigation.navigate('editpost', kirim)
+                                        }
+                                    },
+                                    {
+                                        text: 'Yes,delete',
+                                        style: 'default',
+                                        onPress: () => { DeletePost(data.id) }
+                                    },
+                                    {
+                                        text: 'Cancel',
+                                        style: 'cancel'
+                                    }
+                                ])
+                            : null
+                    }
+
+                }}>
+                <Entypo name='dots-three-horizontal' size={16} color='black'></Entypo>
             </Pressable>
         </View>
-        <Text style={{ fontFamily: 'Inter-Medium', fontSize: 12, color: 'black', paddingVertical: 10 }}>Materi  Kelas 11  - Rumus Peluang Kejadian</Text>
-        <View style={{ alignItems: 'center' }}>
-            <Image source={require('../assets/images/image-post.png')} style={{ width: 370, height: 370 }}></Image>
+        <View style={{ alignItems: 'center', paddingTop: 8 }}>
+            <Image source={{ uri: Constant.api_url + data.file_post }} style={{ width: 370, height: 370, borderRadius: 5 }}></Image>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <BaseButton style={{ padding: 5 }}>
-                        <AntDesign name='staro' size={20} color='black'></AntDesign>
-                    </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
-                </View>
-                <View style={{ paddingStart: 20, paddingVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <BaseButton style={{ padding: 5 }}
-                        onPress={() => { navigation.navigate('comment') }}>
-                        <Ionicons name='chatbubble-ellipses-outline' size={20} color='black'></Ionicons>
+                        onPress={() => {
+                            PostLike(data.id)
+                        }}>
+                        <AntDesign name='staro' size={23} color='#000'></AntDesign>
                     </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>1</Text>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_like}</Text>
+                </View>
+                <View style={{ paddingStart: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <BaseButton style={{ padding: 5 }}
+                        onPress={() => {
+                            let kirim = {
+                                data
+                            }
+                            navigation.navigate('comment', kirim)
+                        }}>
+                        <Ionicons name='chatbubble-ellipses-outline' size={23} color='black'></Ionicons>
+                    </BaseButton>
+                    <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_comment}</Text>
                 </View>
             </View>
             <BaseButton style={{ padding: 5 }}>
-                <Octicons name='download' size={20} color='black'></Octicons>
+                <Feather name='download' size={23} color='black'></Feather>
             </BaseButton>
+        </View>
+        <View style={{ width: 320 }}>
+            <Text style={{ fontFamily: 'Inter-Reguler', fontSize: 12, color: 'black', paddingBottom: 5 }}>{data.sub_judul_post}</Text>
+            <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black', paddingBottom: 15 }}>{data.updated_at}</Text>
         </View>
     </View>
 )
 
 const Fouter = ({ navigation }) => (
     <View style={{ backgroundColor: '#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 50, paddingVertical: 5 }}>
-        <BaseButton style={{ paddingVertical: 5 }}
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('home') }}>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Entypo name="home" size={23} color='#A3A3A3'></Entypo>
                 <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#A3A3A3' }}>Home</Text>
             </View>
         </BaseButton>
-        <BaseButton style={{ paddingVertical: 5 }}
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('notes') }}>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={require('../assets/icons/icons-note-off.png')} style={{ tintColor: '#A3A3A3', height: 25, width: 25 }}></Image>
                 <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#A3A3A3' }}>Notes</Text>
             </View>
         </BaseButton>
-        <BaseButton style={{ paddingVertical: 5 }}
+        <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('profile') }}>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Ionicons name="happy-outline" size={23} color='#A3A3A3'></Ionicons>
