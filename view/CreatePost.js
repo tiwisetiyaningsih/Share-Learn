@@ -19,7 +19,7 @@ export class CreatePost extends Component {
             openModal: false,
             openModal1: false,
             openModal2: false,
-            mapel_post: 'Learn?',
+            mapel_post: 'Subject?',
             file: '',
             user: '',
             judul_post: '',
@@ -29,15 +29,16 @@ export class CreatePost extends Component {
             photoSize: '',
             type_file_post: '',
             file_pdf: '',
-            file_name_pdf: ''
+            file_name_pdf: '',
+            id_user: ''
         }
     }
 
     componentWillMount = async () => {
         const value = await AsyncStorage.getItem('users');
         let Account = JSON.parse(value)
-        console.log(Account.data.username)
-        this.setState({ user: Account.data.username })
+        console.log(Account.data.fullname)
+        this.setState({ user: Account.data.fullname, id_user: Account.data.id_users })
     }
 
     UploadGambar = (method) => { // fungsi upload bukti bayar
@@ -90,9 +91,10 @@ export class CreatePost extends Component {
     }
 
     PostImage = () => {
-        const { judul_post, sub_judul_post, mapel_post, user, camera } = this.state
+        const { judul_post, sub_judul_post, mapel_post, user, camera, id_user } = this.state
 
         let postData = {
+            "id_user": id_user,
             "user_post": user,
             "judul_post": judul_post,
             "sub_judul_post": sub_judul_post,
@@ -108,24 +110,24 @@ export class CreatePost extends Component {
             console.log(back.data)
             if (back.data.massage === 'success') {
                 console.log("hello")
-                Alert.alert("Berhasil", back.data.massage, [
+                Alert.alert("Successfully", 'Your post was already uploaded.', [
                     {
                         text: "oke",
                         style: 'default',
                         onPress: this.props.navigation.navigate('listpostmapel', this.state.mapel_post)
                     }
                 ])
-                this.setState({judul_post: '', sub_judul_post: '', mapel_post:'Learn?', type_file_post: ''})
+                this.setState({ judul_post: '', sub_judul_post: '', mapel_post: 'Learn?', type_file_post: '' })
 
             } else {
-                Alert.alert("Gagal", back.data.massage)
+                Alert.alert("Failed", 'Your postings failed to upload.')
             }
         })
 
     }
 
     GetPdf = async () => {
-        this.setState({openModal: false})
+        this.setState({ openModal: false })
         let document = await DocumentPicker.pick({
             allowMultiSelection: false,
             copyTo: 'cachesDirectory'
@@ -149,6 +151,7 @@ export class CreatePost extends Component {
 
             let body_form_data = new FormData()
             // body_form_data.append('id_pegawai', '19')
+            body_form_data.append('id_user', this.state.id_user)
             body_form_data.append('file_post', this.state.file_pdf)
             body_form_data.append('user_post', this.state.user)
             body_form_data.append('judul_post', this.state.judul_post)
@@ -168,17 +171,17 @@ export class CreatePost extends Component {
 
             if (push_to_server.data.massage === 'success') {
                 console.log("hello")
-                Alert.alert("Berhasil", push_to_server.data.massage, [
+                Alert.alert("Successfully", 'Your post was already uploaded.', [
                     {
-                        text: "oke",
+                        text: "Oke",
                         style: 'default',
-                        onPress: this.props.navigation.navigate('listpostmapel',this.state.mapel_post)
+                        onPress: this.props.navigation.navigate('listpostmapel', this.state.mapel_post)
                     }
                 ])
-                this.setState({judul_post: '', sub_judul_post: '', mapel_post: 'Learn?', type_file_post: ''})
+                this.setState({ judul_post: '', sub_judul_post: '', mapel_post: 'Learn?', type_file_post: '' })
 
             } else {
-                Alert.alert("Gagal", push_to_server.data.massage)
+                Alert.alert("Failed", 'Your postings failed to upload.')
             }
         } catch (error) {
             console.log(error);
@@ -229,58 +232,68 @@ export class CreatePost extends Component {
                     // // pdf
                     // this.PostPDF()
                 }}> </Header>
-                <ScrollView style={{paddingBottom: 60}}>
+                <ScrollView style={{ paddingBottom: 60 }}>
                     <FormPost navigation={this.props.navigation} OpenModal={this.OpenModal} OpenModal1={this.OpenModal1} mapel_post={this.state.mapel_post}
                         judul_post={this.state.judul_post} sub_judul_post={this.state.sub_judul_post} file={this.state.file} SetJudul={(text) => { this.SetJudul(text) }}
                         SetSubJudul={(text) => { this.SetSubJudul(text) }} user={this.state.user} source={source} photoSize={photoSize} file_name_pdf={file_name_pdf} type_file_post={this.state.type_file_post}></FormPost>
                 </ScrollView>
                 <Modal visible={this.state.openModal1} transparent>
                     <View style={{
-                        flex: 1, paddingHorizontal: 50, marginTop: -210, alignItems: 'flex-start', justifyContent: 'center',
+                        flex: 1, paddingHorizontal: 50, marginTop: -90, alignItems: 'flex-start', justifyContent: 'center',
                         backgroundColor: 'rgba(80,80,80,0)'
                     }}>
                         <View style={{ backgroundColor: "#FFF", padding: 8, minWidth: 100, elevation: 5, borderRadius: 10, alignItems: 'center' }}>
-                            <Pressable style={{ padding: 5, paddingStart: 65, marginEnd: -8, marginTop: -3, borderBottomColor: '#AAA', borderBottomWidth: .2 }}
+                            <Pressable style={{ padding: 5, paddingStart: 65, marginEnd: -50, marginTop: -3 }}
                                 onPress={() => {
                                     this.setState({ openModal1: false })
                                 }}>
-                                <Ionicons name='ios-close' size={15} color='#000' style={{ paddingHorizontal: 8 }}></Ionicons>
+                                <Ionicons name='close-circle' size={23} color='#38C6C6' style={{ marginRight:- 20 }}></Ionicons>
                             </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
-                                // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1(this.MapelPost('Matematika')) }}>
-                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Matematika</Text>
-                            </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
-                                // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1(this.MapelPost('Kimia')) }}>
-                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Kimia</Text>
-                            </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
-                                // onPress={() => { this.SetComunitasTravel() }}>
-                                onPress={() => { this.CloseModal1(this.MapelPost('Fisika')) }}>
-                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>Fisika</Text>
-                            </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center', width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
                                 onPress={() => { this.CloseModal1(this.MapelPost('Bahasa Indonesia')) }}>
-                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>B.Indonesia</Text>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Bahasa Indonesia</Text>
                             </Pressable>
-                            <Pressable style={{ padding: 5, justifyContent: 'flex-start', alignItems: 'center' }} android_ripple={{ color: '#FFDDDD' }}
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center', width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6' }} android_ripple={{ color: '#FFDDDD' }}
                                 // onPress={() => { this.SetComunitasTravel() }}>
                                 onPress={() => { this.CloseModal1(this.MapelPost('Bahasa Inggris')) }}>
-                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: 'black' }}>B.Inggris</Text>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Bahasa Inggris</Text>
+                            </Pressable>
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center', width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6' }} android_ripple={{ color: '#FFDDDD' }}
+                                // onPress={() => { this.SetComunitasTravel() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Biologi')) }}>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Biologi</Text>
+                            </Pressable>
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center', width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6' }} android_ripple={{ color: '#FFDDDD' }}
+                                // onPress={() => { this.SetComunitasTravel() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Fisika')) }}>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Fisika</Text>
+                            </Pressable>
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center', width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6' }} android_ripple={{ color: '#FFDDDD' }}
+                                // onPress={() => { this.SetComunitasTravel() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Geografi')) }}>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Geografi</Text>
+                            </Pressable>
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center' , width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6'}} android_ripple={{ color: '#FFDDDD' }}
+                                // onPress={() => { this.SetComunitasTravel() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Kimia')) }}>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000'}}>Kimia</Text>
+                            </Pressable>
+                            <Pressable style={{ margin: 5, justifyContent: 'flex-start', alignItems: 'center' , width: 150, paddingVertical: 3, paddingHorizontal: 5, borderRadius: 10, borderWidth: 1, borderColor: '#38C6C6'}} android_ripple={{ color: '#FFDDDD' }}
+                                // onPress={() => { this.SetComunitasTravel() }}>
+                                onPress={() => { this.CloseModal1(this.MapelPost('Matematika')) }}>
+                                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 12, color: '#000' }}>Matematika</Text>
                             </Pressable>
                         </View>
                     </View>
                 </Modal>
                 <Modal visible={this.state.openModal} transparent>
                     <View style={{
-                        flex: 1, paddingHorizontal: 50, marginTop: -150, alignItems: 'flex-start', justifyContent: 'center',
+                        flex: 1, paddingHorizontal: 50, marginBottom: -240, alignItems: 'flex-start', justifyContent: 'center',
                         backgroundColor: 'rgba(80,80,80,0)'
                     }}>
                         <View style={{ backgroundColor: "#FFF", padding: 5, minWidth: 100, elevation: 5, borderRadius: 10 }}>
-                            <Pressable style={{ padding: 5, paddingStart: 65, marginTop: -3, borderBottomColor: '#AAA', borderBottomWidth: .5 }}
+                            <Pressable style={{ padding: 5, paddingStart: 65, marginTop: -3, borderBottomColor: '#000', borderBottomWidth: .5 }}
                                 onPress={() => {
                                     this.setState({ openModal: false })
                                 }}>
@@ -308,21 +321,21 @@ export class CreatePost extends Component {
                 <Modal visible={this.state.openModal2} transparent>
                     <View style={{ backgroundColor: 'rgba(80,80,80,.5)', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ backgroundColor: '#FFF', padding: 10, borderRadius: 10 }}>
-                            <Pressable style={{ padding: 5, paddingStart: 95, marginTop: -8, borderBottomColor: '#AAA', borderBottomWidth: .3 }}
+                            <Pressable style={{ padding: 5, paddingLeft: 145, marginTop: -8, borderBottomColor: '#AAA', borderBottomWidth: .3 }}
                                 onPress={() => {
                                     this.setState({ openModal2: false })
                                 }}>
                                 <Ionicons name='ios-close' size={15} color='#000' ></Ionicons>
                             </Pressable>
-                            <Pressable style={{ padding: 5, flexDirection: 'row', alignItems: 'center' }}
+                            <Pressable style={{ padding: 5, flexDirection: 'row', alignItems: 'center', marginTop: 5 }}
                                 onPress={() => { this.UploadGambar('select-from-gallery', this.setState({ openModal2: false })) }}>
                                 <EvilIcons name='image' size={25} color='#000'></EvilIcons>
-                                <Text style={{ fontFamily: 'Inter-Medium', color: '#000', fontSize: 12, paddingStart: 5 }}>Pilih Galeri</Text>
+                                <Text style={{ fontFamily: 'Inter-Medium', color: '#000', fontSize: 12, paddingStart: 5 }}>Pick from the gallery</Text>
                             </Pressable>
                             <Pressable style={{ padding: 5, flexDirection: 'row', alignItems: 'center' }}
                                 onPress={() => { this.UploadGambar('camera', this.setState({ openModal2: false })) }}>
                                 <EvilIcons name='camera' size={25} color='#000'></EvilIcons>
-                                <Text style={{ fontFamily: 'Inter-Medium', color: '#000', fontSize: 12, paddingStart: 5 }}>Buka Kamera</Text>
+                                <Text style={{ fontFamily: 'Inter-Medium', color: '#000', fontSize: 12, paddingStart: 5 }}>Open the camera</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -333,7 +346,7 @@ export class CreatePost extends Component {
 }
 
 const Header = ({ navigation, Post }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
+    <View style={{ backgroundColor: '#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
         <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('home') }}>
             <Octicons name='chevron-left' size={25} color='black'></Octicons>
@@ -350,8 +363,8 @@ const Header = ({ navigation, Post }) => (
 )
 
 const FormPost = ({ navigation, OpenModal, OpenModal1, mapel_post, judul_post, sub_judul_post, file_name_pdf, SetJudul, SetSubJudul, user, source, photoSize, type_file_post }) => (
-    <View style={{ paddingHorizontal: 30, marginTop: 20, marginBottom: 40 }}>
-        <BaseButton style={{ marginEnd: 200 }}
+    <View style={{ backgroundColor: '#FFF', paddingHorizontal: 30, marginTop: 20, marginBottom: 40 }}>
+        <BaseButton style={{ marginEnd: 100 }}
             onPress={() => { navigation.navigate('profile') }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={require('../assets/logo/user_profile.png')}></Image>
@@ -367,11 +380,25 @@ const FormPost = ({ navigation, OpenModal, OpenModal1, mapel_post, judul_post, s
                 <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#FFF' }}>{mapel_post}</Text>
             </View>
         </View>
-        <View style={{ paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2, paddingBottom: 10}}>
+        <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Tittle</Text>
+            <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
+                placeholder='What do you think?'
+                value={judul_post}
+                onChangeText={(text) => { SetJudul(text) }}></TextInput>
+        </View>
+        <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Subtitles</Text>
+            <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
+                placeholder='What do you think?'
+                value={sub_judul_post}
+                onChangeText={(text) => { SetSubJudul(text) }}></TextInput>
+        </View>
+        <View style={{ paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2, paddingBottom: 10 }}>
             <Pressable style={{ flexDirection: 'row' }}
                 onPress={() => { OpenModal() }}>
                 <MaterialCommunityIcons name='file-plus-outline' size={20} color='#000'></MaterialCommunityIcons>
-                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000', paddingHorizontal: 10, minHeight: 40 }}>Input materi</Text>
+                <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000', paddingHorizontal: 10, minHeight: 40 }}>Lesson material</Text>
             </Pressable>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {
@@ -385,34 +412,20 @@ const FormPost = ({ navigation, OpenModal, OpenModal1, mapel_post, judul_post, s
                 {
                     type_file_post == 'pdf'
 
-                    // kondisi tipe file
-                    ?
-                    <Text style={{ fontFamily: 'Itim-Regular', fontSize: 13, color: '#000' }}>{file_name_pdf}</Text>
-                    : null
+                        // kondisi tipe file
+                        ?
+                        <Text style={{ fontFamily: 'Itim-Regular', fontSize: 13, color: '#000' }}>{file_name_pdf}</Text>
+                        : null
                 }
-                
+
             </View>
             {
                 type_file_post == 'image'
-                ?
-                <Image source={source} style={photoSize} ></Image>
-                :null
+                    ?
+                    <Image source={source} style={photoSize} ></Image>
+                    : null
             }
-            
-        </View>
-        <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Judul</Text>
-            <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
-                placeholder='What do you think?'
-                value={judul_post}
-                onChangeText={(text) => { SetJudul(text) }}></TextInput>
-        </View>
-        <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Sub Judul</Text>
-            <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
-                placeholder='What do you think?'
-                value={sub_judul_post}
-                onChangeText={(text) => { SetSubJudul(text) }}></TextInput>
+
         </View>
     </View>
 )

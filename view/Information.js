@@ -31,11 +31,11 @@ const Body = () => (
       <Image source={require('../assets/logo/logo_share_learn.png')}></Image>
     </View>
     <View style={{ paddingHorizontal: 10, paddingVertical: 70, alignItems: 'center' }}>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>Aplikasi share learn merupakan aplikasi</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>yang memiliki beberapa fitur seperti sharing</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>aplikasi  learn, save learn & notes. Aplikasi</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>digunakan untuk berbagi / sharing tentang</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>materi pembelajaran.</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>The Share Learn application is one that</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>has some features such as lesson sharing,</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>save & notes lessons. This application is</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>used for sharing about dissemination</Text>
+      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 15.5, color: '#000' }}>material.</Text>
     </View>
     <View style={{ paddingTop: 15 }}>
       <Image source={require('../assets/logo/blue.png')}></Image>

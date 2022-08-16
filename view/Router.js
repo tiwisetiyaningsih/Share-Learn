@@ -25,6 +25,14 @@ import LikedPosts from './LikedPosts'
 import MyPost from './MyPost'
 import EditProfile from './EditProfile'
 import MyAccount from './MyAccount'
+import Search from './Search'
+import Forum from './Forum'
+import DetailNotif from './DetailNotif'
+import CreatePostForum from './CreatePostForum'
+import CommentPostForum from './CommentPostForum'
+import DetailnotifForum from './DetailnotifForum'
+import Reply from './Reply'
+
 
 const Stack = createStackNavigator()
 
@@ -120,6 +128,34 @@ export default function Router() {
         </Stack.Screen>
 
         <Stack.Screen name='myaccount' component={MyAccount}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='search' component={Search}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='forum' component={Forum}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='detailnotif' component={DetailNotif}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='createpostforum' component={CreatePostForum}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='commentpostforum' component={CommentPostForum}>
+
+        </Stack.Screen>
+
+        <Stack.Screen name='detailnotifForum' component={DetailnotifForum}>
+          
+        </Stack.Screen>
+
+        <Stack.Screen name='reply' component={Reply}>
 
         </Stack.Screen>
 

@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, StyleSheet, TextInput, AsyncStorage, Alert } from 'react-native'
+import { Text, View, StatusBar, StyleSheet, TextInput, AsyncStorage, Alert, Image } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton, ScrollView } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -22,8 +22,8 @@ export class CreateNotes extends Component {
     componentWillMount = async () => {
         const value = await AsyncStorage.getItem('users');
         let Account = JSON.parse(value)
-        console.log(Account.data.username)
-        this.setState({ user: Account.data.username })
+        console.log(Account.data.fullname)
+        this.setState({ user: Account.data.fullname })
     }
 
     PostNotes = () => {
@@ -50,16 +50,16 @@ export class CreateNotes extends Component {
             console.log(back.data)
             if (back.status === 200 && back.data.message === "success") {
                 console.log("hello")
-                Alert.alert("Berhasil", 'Note berhasil disimpan', [
+                Alert.alert("Successfully", 'The note was successfully kept.', [
                     {
-                        text: "oke",
+                        text: "Oke",
                         style: 'default',
                         onPress: this.props.navigation.navigate('notes')
                     }
                 ])
-        
+
             } else {
-                Alert.alert("Gagal", 'Note gagal disimpan')
+                Alert.alert("Failed", 'Note failed saved.')
             }
         })
     }
@@ -80,7 +80,7 @@ export class CreateNotes extends Component {
             <View style={style.app}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
                 <Header navigation={this.props.navigation} PostNotes={() => { this.PostNotes() }}></Header>
-                <ScrollView>
+                <ScrollView style={{marginBottom: 20}}>
                     <FormNotes judul={this.state.judul} sub_judul={this.state.sub_judul} notes={this.state.notes} SetJudul={(text) => { this.SetJudul(text) }}
                         SetSubJudul={(text) => { this.SetSubJudul(text) }} SetNotes={(text) => { this.SetNotes(text) }} ></FormNotes>
                 </ScrollView>
@@ -90,7 +90,7 @@ export class CreateNotes extends Component {
 }
 
 const Header = ({ navigation, PostNotes }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
+    <View style={{ backgroundColor:'#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
         <BaseButton style={{ padding: 5 }}
             onPress={() => { navigation.navigate('notes') }}>
             <Octicons name='chevron-left' size={25} color='black'></Octicons>
@@ -104,23 +104,26 @@ const Header = ({ navigation, PostNotes }) => (
 )
 
 const FormNotes = ({ SetJudul, SetSubJudul, SetNotes, judul, sub_judul, notes }) => (
-    <View style={{ paddingHorizontal: 30, marginTop: 20 }}>
+    <View style={{ backgroundColor:'#FFF', paddingHorizontal: 30, marginTop: 20 }}>
+        <View style={{ alignItems:'center', justifyContent:'center'}}>
+            <Image source={require('../assets/images/note.png')}></Image>
+        </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Judul</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Tittle</Text>
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
                 placeholder='What do you think?'
                 value={judul}
                 onChangeText={(text) => { SetJudul(text) }}></TextInput>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Sub Judul</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Subtitles</Text>
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
                 placeholder='What do you think?'
                 value={sub_judul}
                 onChangeText={(text) => { SetSubJudul(text) }}></TextInput>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Notes</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Note</Text>
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }} multiline={true}
                 placeholder='What do you think?'
                 value={notes}

@@ -12,7 +12,8 @@ export class EditProfile extends Component {
       id_user: '',
       user: '',
       nis: '',
-      fullname: ''
+      fullname: '',
+      fullname_before: '',
     }
   }
 
@@ -20,17 +21,17 @@ export class EditProfile extends Component {
     const value = await AsyncStorage.getItem('users');
     let Account = JSON.parse(value)
     console.log(Account)
-    let user = Account.data.username
-    this.setState({ user: Account.data.username })
+    let user = Account.data.fullname
+    this.setState({ user: Account.data.fullname })
     console.log('nama user', user)
     let nis = Account.data.nis
     this.setState({ nis: Account.data.nis })
     console.log('nis user', nis)
     let fullname = Account.data.fullname
-    this.setState({ fullname: Account.data.fullname })
+    this.setState({ fullname: Account.data.fullname, fullname_before: Account.data.fullname })
     console.log('fullname user', fullname)
     let id_user = Account.data.id_users
-    this.setState({id_user: Account.data.id_users})
+    this.setState({ id_user: Account.data.id_users })
     console.log('id_user', id_user)
   }
 
@@ -45,11 +46,12 @@ export class EditProfile extends Component {
   }
 
   EditProfil = () => {
-    const { user, fullname, nis, id_user } = this.state
-    console.log(user,fullname,nis,id_user)
+    const { user, fullname, nis, id_user, fullname_before } = this.state
+    console.log(user, fullname, nis, id_user)
     let postData =
     {
-      "username": user,
+      // "username": user,
+      "fullname_before": fullname_before,
       "fullname": fullname,
       "nis": nis,
     }
@@ -58,12 +60,19 @@ export class EditProfile extends Component {
       method: 'POST',
       url: Constant.api_url + 'api/user/update/' + id_user,
       data: postData
-    }).then((back) => {
+    }).then(async (back) => {
       console.log(back.status)
+      const value = await AsyncStorage.getItem('users');
+      let Account = JSON.parse(value)
+
+      
       if (back.status === 200) {
-        Alert.alert("success", "update account success", [
+        Account.data.fullname = fullname
+        Account.data.nis = nis
+        await AsyncStorage.setItem("users", JSON.stringify(Account))
+        Alert.alert("Successfully", "Account update successful.", [
           {
-            text: "oke",
+            text: "Oke",
             style: 'default',
             onPress: this.props.navigation.navigate('myaccount')
           }
@@ -74,15 +83,15 @@ export class EditProfile extends Component {
     })
   }
 
-render() {
-  return (
-    <View style={style.app}>
-      <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-      <Header navigation={this.props.navigation} EditProfil={()=>{this.EditProfil()}}></Header>
-      <FormEditProfile user={this.state.user} fullname={this.state.fullname} nis={this.state.nis} SetUsername={(text) => { this.SetUsername(text) }} SetFullname={(text) => { this.SetFullname(text) }} SetNis={(text) => { this.SetNis(text) }}></FormEditProfile>
-    </View>
-  )
-}
+  render() {
+    return (
+      <View style={style.app}>
+        <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
+        <Header navigation={this.props.navigation} EditProfil={() => { this.EditProfil() }}></Header>
+        <FormEditProfile user={this.state.user} fullname={this.state.fullname} nis={this.state.nis} SetUsername={(text) => { this.SetUsername(text) }} SetFullname={(text) => { this.SetFullname(text) }} SetNis={(text) => { this.SetNis(text) }}></FormEditProfile>
+      </View>
+    )
+  }
 }
 
 const Header = ({ navigation, EditProfil }) => (
@@ -93,7 +102,7 @@ const Header = ({ navigation, EditProfil }) => (
     </BaseButton>
     <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: 'black' }}>Edit Profile</Text>
     <BaseButton style={{ padding: 5 }}
-    onPress={()=>{EditProfil()}}>
+      onPress={() => { EditProfil() }}>
       <MaterialCommunityIcons name='send-circle' size={25} color='#38C6C6' style={{ rotation: -26.15 }}></MaterialCommunityIcons>
     </BaseButton>
   </View>
@@ -101,7 +110,7 @@ const Header = ({ navigation, EditProfil }) => (
 
 const FormEditProfile = ({ user, fullname, nis, SetFullname, SetNis, SetUsername }) => (
   <View style={{ padding: 20 }}>
-    <View style={{ marginHorizontal: 20, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
+    {/* <View style={{ marginHorizontal: 20, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
       <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Username</Text>
       <TextInput
         style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', paddingBottom: -2, paddingTop: -5, marginEnd: 10 }}
@@ -109,7 +118,7 @@ const FormEditProfile = ({ user, fullname, nis, SetFullname, SetNis, SetUsername
         value={user}
         onChangeText={(text) => { SetUsername(text) }}>
       </TextInput>
-    </View>
+    </View> */}
     <View style={{ marginHorizontal: 20, borderBottomColor: '#000', borderBottomWidth: 1.2, paddingTop: 25 }}>
       <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Fullname</Text>
       <TextInput

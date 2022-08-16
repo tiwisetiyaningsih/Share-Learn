@@ -23,11 +23,15 @@ export class Login extends Component {
     const { Username, Password } = this.state
     console.log(Username, Password)
 
+    let token = await AsyncStorage.getItem('fcmToken')
+
     let postData =
     {
       "username": Username,
-      "password": Password
+      "password": Password,
+      token
     }
+
     console.log(Constant.api_url + 'api/user/login')
     // console.log ('postData', postData)
     axios({
@@ -38,20 +42,20 @@ export class Login extends Component {
       // let LoginUsers = back.data
       // await AsyncStorage.setItem("users", JSON.stringify(LoginUsers))
 
-    //  console.log('backData', back.data)
+      //  console.log('backData', back.data)
       if (back.status === 200 && back.data.message === "data falid") {
-        
+
         await AsyncStorage.setItem("users", JSON.stringify(back.data))
         this.props.navigation.dispatch(
           CommonActions.reset({
-              index: 0, 
-              routes: [
-                  {
-                      name:'home'
-                  }
-              ]
+            index: 0,
+            routes: [
+              {
+                name: 'home'
+              }
+            ]
           })
-      )
+        )
         this.setState({ Username: '', Password: '' })
       } else {
         Alert.alert("Gagal", back.data.message)
@@ -76,7 +80,7 @@ export class Login extends Component {
     return (
       <View style={style.app}>
         <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-        <BodyLogin navigation={this.props.navigation}  SetUsername={(text) => { this.SetUsername(text) }} SetPassword={(text) => {this.SetPassword(text)}} Loginapp={()=>{this.Loginapp()}} Username={this.state.Username} Password={this.state.Password}></BodyLogin>
+        <BodyLogin navigation={this.props.navigation} SetUsername={(text) => { this.SetUsername(text) }} SetPassword={(text) => { this.SetPassword(text) }} Loginapp={() => { this.Loginapp() }} Username={this.state.Username} Password={this.state.Password}></BodyLogin>
       </View>
     )
   }
@@ -101,7 +105,7 @@ const BodyLogin = ({ navigation, Loginapp, Username, Password, SetUsername, SetP
               placeholder='Your username'
               value={Username}
               onChangeText={(text) => { SetUsername(text) }}
-              ></TextInput>
+            ></TextInput>
           </View>
         </View>
         <View style={{ paddingTop: 10, paddingHorizontal: 20 }}>
@@ -112,7 +116,7 @@ const BodyLogin = ({ navigation, Loginapp, Username, Password, SetUsername, SetP
               placeholder='Your password'
               value={Password}
               onChangeText={(text) => { SetPassword(text) }}
-              ></TextInput>
+            ></TextInput>
           </View>
         </View>
         <View style={{ alignItems: 'center', paddingVertical: 30 }}>

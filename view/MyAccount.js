@@ -19,8 +19,8 @@ export class MyAccount extends Component {
   UNSAFE_componentWillMount = async () => {
     const value = await AsyncStorage.getItem('users');
     let Account = JSON.parse(value)
-    let user = Account.data.username
-    this.setState({ user: Account.data.username })
+    let user = Account.data.fullname
+    this.setState({ user: Account.data.fullname })
     console.log ('nama user', user)
     let nis = Account.data.nis
     this.setState({ nis: Account.data.nis })
@@ -33,7 +33,24 @@ export class MyAccount extends Component {
     console.log ('fullname user', fullname)
 }
 
-
+componentDidMount = async () => {
+  this.props.navigation.addListener('focus', async ()=>{
+    const value = await AsyncStorage.getItem('users');
+    let Account = JSON.parse(value)
+    let user = Account.data.fullname
+    this.setState({ user: Account.data.fullname })
+    console.log ('nama user', user)
+    let nis = Account.data.nis
+    this.setState({ nis: Account.data.nis })
+    console.log ('nis user', nis)
+    let email = Account.data.email
+    this.setState({ email: Account.data.email })
+    console.log ('email user', email)
+    let fullname = Account.data.fullname
+    this.setState({ fullname: Account.data.fullname })
+    console.log ('fullname user', fullname)
+  })
+}
 
   render() {
     return (
@@ -47,7 +64,7 @@ export class MyAccount extends Component {
 }
 
 const Header = ({ navigation }) => (
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 25, alignItems: 'center' }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 20, alignItems: 'center' }}>
     <BaseButton style={{ padding: 5 }}
       onPress={() => { navigation.navigate('profile') }}>
       <Octicons name='chevron-left' size={25} color='black'></Octicons>
@@ -65,11 +82,7 @@ const Body = ({ user, nis, email, fullname }) => (
     <View style={{ paddingBottom: 10 }}>
       <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#000' }}>Account Information</Text>
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 30 }}>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000' }}>Username</Text>
-      <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12.5, color: '#A3A3A3' }}>@{user}</Text>
-    </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 30 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 30, paddingTop: 10}}>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000' }}>Fullname</Text>
       <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12.5, color: '#A3A3A3' }}>{fullname}</Text>
     </View>

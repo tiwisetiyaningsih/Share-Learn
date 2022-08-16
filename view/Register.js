@@ -43,10 +43,10 @@ export class Register extends Component {
         console.log("hello")
         this.props.navigation.navigate('login')
       } else {
-        Alert.alert("Gagal", back.data.message)
+        Alert.alert("Register Fail", back.data.message)
       } 
-      if (back.status === 200 && back.data.message === "username telah terpakai") {
-        Alert.alert("Gagal", back.data.message )
+      if (back.status === 200 && back.data.message === "The username is used!") {
+        Alert.alert("Register Fail", 'The username is used!' )
       }
     })
   }
@@ -104,7 +104,7 @@ const BodyRegister = ({ navigation, RegisterApp, SetUsername, SetFullname, SetNi
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account' size={20}></MaterialCommunityIcons>
             <TextInput style={{ paddingStart: 10 }}
-              placeholder='Your username'
+              placeholder='Username'
               value={Username}
               onChangeText={(text) => { SetUsername(text) }}></TextInput>
           </View>
@@ -114,7 +114,7 @@ const BodyRegister = ({ navigation, RegisterApp, SetUsername, SetFullname, SetNi
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account' size={20}></MaterialCommunityIcons>
             <TextInput style={{ paddingStart: 10 }}
-              placeholder='Your fullname'
+              placeholder='Fullname'
               value={Fullname}
               onChangeText={(text) => { SetFullname(text) }}></TextInput>
           </View>
@@ -124,7 +124,7 @@ const BodyRegister = ({ navigation, RegisterApp, SetUsername, SetFullname, SetNi
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account-cog' size={20}></MaterialCommunityIcons>
             <TextInput style={{ paddingStart: 10 }}
-              placeholder='Your NIS'
+              placeholder='NIS'
               value={Nis}
               onChangeText={(text) => { SetNis(text) }}></TextInput>
           </View>
@@ -134,7 +134,7 @@ const BodyRegister = ({ navigation, RegisterApp, SetUsername, SetFullname, SetNi
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <Zocial name='email' size={20}></Zocial>
             <TextInput style={{ paddingStart: 10 }}
-              placeholder='Your email'
+              placeholder='Email'
               value={Email}
               onChangeText={(text) => { SetEmail(text) }}></TextInput>
           </View>
@@ -144,7 +144,7 @@ const BodyRegister = ({ navigation, RegisterApp, SetUsername, SetFullname, SetNi
           <View style={{ borderColor: '#38C6C6', borderWidth: 1, borderRadius: 10, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons name='account-lock' size={20}></MaterialCommunityIcons>
             <TextInput style={{ paddingStart: 10 }}
-              placeholder='Your password' secureTextEntry
+              placeholder='Password' secureTextEntry
               value={Password}
               onChangeText={(text) => { SetPassword(text) }}></TextInput>
           </View>

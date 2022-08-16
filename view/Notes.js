@@ -6,6 +6,8 @@ import { BaseButton } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import axios from 'axios'
 
 
@@ -24,8 +26,8 @@ export class Notes extends Component {
   UNSAFE_componentWillMount = async () => {
     const value = await AsyncStorage.getItem('users');
     let Account = JSON.parse(value)
-    let user = Account.data.username
-    this.setState({ user: Account.data.username })
+    let user = Account.data.fullname
+    this.setState({ user: Account.data.fullname })
     console.log('nama user', user)
 
     axios({
@@ -41,6 +43,27 @@ export class Notes extends Component {
     })
   }
 
+  componentDidMount = async () => {
+    this.props.navigation.addListener('focus', async () => {
+      const value = await AsyncStorage.getItem('users');
+      let Account = JSON.parse(value)
+      let user = Account.data.fullname
+      this.setState({ user: Account.data.fullname })
+      console.log('nama user', user)
+      axios({
+        method: 'GET',
+        url: Constant.api_url + 'api/notes/read/' + user
+      }).then((back) => {
+        console.log(JSON.stringify(back.data, null, 2))
+        let listNotes = back.data.data.reverse()
+        this.setState({ listNotes: back.data.data.reverse() })
+        console.log('listNotes', listNotes)
+      }).catch((error) => {
+        console.log("error", error)
+      })
+    })
+  }
+
   DeleteNote = (id_notes) => {
     console.log(id_notes)
     console.log(Constant.api_url + 'api/notes/delete/' + id_notes)
@@ -52,7 +75,7 @@ export class Notes extends Component {
       console.log(JSON.stringify(back.data, null, 2))
       if (back.data.massage === 'success') {
         console.log("hello")
-        Alert.alert("Berhasil", 'Note berhasil terhapus', [
+        Alert.alert("Successfully", 'The note was erased.', [
           {
             text: "oke",
             style: 'default',
@@ -61,7 +84,7 @@ export class Notes extends Component {
         ])
 
       } else {
-        Alert.alert("Gagal", 'Note gagal terhapus')
+        Alert.alert("Failed", 'The note failed to be erased.')
       }
     }).catch((error) => {
       console.log(error)
@@ -85,7 +108,7 @@ export class Notes extends Component {
   render() {
     return (
       <View style={style.app}>
-        <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
+        <StatusBar backgroundColor='#38C6C6' barStyle='light-content' ></StatusBar>
         <Header navigation={this.props.navigation}></Header>
         <ScrollView>
           {this.state.listNotes.map((item, index) => {
@@ -100,21 +123,14 @@ export class Notes extends Component {
 }
 
 const Header = ({ navigation }) => (
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 15, alignItems: 'center', borderBottomWidth: .2, marginBottom: 5, elevation: 1}}>
-    <BaseButton style={{ padding: 5 }}
-      onPress={() => { navigation.navigate('home') }}>
-      <Octicons name='chevron-left' size={25} color='black'></Octicons>
-    </BaseButton>
-    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 17, color: 'black' }}>Notes</Text>
-    <BaseButton
-      onPress={() => { navigation.navigate('createnotes') }}>
-      <AntDesign name='pluscircle' size={20} color='#38C6C6'></AntDesign>
-    </BaseButton>
+  <View style={{ backgroundColor: '#38C6C6', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 20, alignItems: 'center', }}>
+    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 18, color: '#FFF' }}>Notes</Text>
+    <Image source={require('../assets/logo/logo_share_learn.png')} style={{ width: 40, height: 35, tintColor: '#FFF' }} ></Image>
   </View>
 )
 
 const ListNotes = ({ navigation, data, DeleteNote }) => (
-  <View style={{ flexDirection: 'row', paddingHorizontal: 25, justifyContent: 'space-between', paddingVertical: 15, borderBottomColor: '#DADADA', borderBottomWidth: 1, alignItems: 'center' }}>
+  <View style={{ backgroundColor: '#FFF', flexDirection: 'row', paddingHorizontal: 25, justifyContent: 'space-between', paddingVertical: 10, borderBottomColor: '#DADADA', borderBottomWidth: 1, alignItems: 'center' }}>
     <BaseButton style={{ flexDirection: 'row', paddingVertical: 5 }}
       onPress={() => {
         let kirim = {
@@ -125,13 +141,13 @@ const ListNotes = ({ navigation, data, DeleteNote }) => (
       <MaterialIcons name='notes' size={30} color='#38C6C6'></MaterialIcons>
       {/* FF8C00 */}
       <View style={{ width: 300, flexDirection: 'column', paddingHorizontal: 10 }}>
-        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#FF8C00' }}>{data.judul_notes}</Text>
-        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: 'black' }}>{data.sub_judul_notes}</Text>
+        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#FF8C00' }}>{data.judul_notes}</Text>
+        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 11, color: 'black' }}>{data.sub_judul_notes}</Text>
       </View>
     </BaseButton>
     <BaseButton style={{ padding: 5, marginTop: -15 }}
       onPress={() => {
-        Alert.alert('Delete Note', 'Are you sure?',
+        Alert.alert('Delete', 'Are you sure you want to delete it?',
           [
             {
               text: 'Yes, delete',
@@ -144,41 +160,57 @@ const ListNotes = ({ navigation, data, DeleteNote }) => (
             }
           ])
       }}>
-      <Ionicons name='remove-circle-outline' size={20}></Ionicons>
+      <Ionicons name='remove-circle-outline' size={20} color='#000'></Ionicons>
     </BaseButton>
   </View>
 )
 
 const Fouter = ({ navigation }) => (
-  <View style={{ backgroundColor: '#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 50, paddingVertical: 5 }}>
-    <BaseButton style={{ padding: 5 }}
-      onPress={() => { navigation.navigate('home') }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Entypo name="home" size={23} color='#A3A3A3'></Entypo>
-        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#A3A3A3' }}>Home</Text>
-      </View>
-    </BaseButton>
-    <BaseButton style={{ padding: 5 }}
+  <View style={{ flexDirection: 'column' }}>
+    <View style={{ marginTop: -67, justifyContent: 'flex-end', alignItems: 'flex-end', marginBottom: 15 }}>
+      <BaseButton style={{ marginRight: 20, backgroundColor: '#38C6C6', borderRadius: 50, padding: 13, elevation: 5 }}
+        onPress={() => {
+          navigation.navigate('createnotes')
+        }}>
+        <MaterialCommunityIcons name='plus' size={25} color='#FFF'></MaterialCommunityIcons>
+      </BaseButton>
+    </View>
+    <View style={{ backgroundColor: '#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 6, marginTop: 2, elevation: 5 }}>
+      <BaseButton style={{ padding: 5 }}
+        onPress={() => { navigation.navigate('home') }}>
+        <Ionicons name="home-outline" size={23} color='#38C6C6'></Ionicons>
+      </BaseButton>
+      {/* <BaseButton style={{ padding: 5 }}
       onPress={() => { navigation.navigate('notes') }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Image source={require('../assets/icons/icons-note-off.png')} style={{ tintColor: '#38C6C6', height: 25, width: 25 }}></Image>
-        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#38C6C6' }}>Notes</Text>
+      <MaterialCommunityIcons name='notebook-outline' size={23} color='#A3A3A3'></MaterialCommunityIcons>
+    </BaseButton> */}
+      <View style={{ backgroundColor: '#FFF', borderRadius: 50, marginTop: - 20, padding: 3 }}>
+        <BaseButton>
+          <View style={{ backgroundColor: '#38C6C6', borderRadius: 50, padding: 10 }}>
+            <MaterialCommunityIcons name='notebook' size={23} color='#FFF'></MaterialCommunityIcons>
+          </View>
+        </BaseButton>
       </View>
-    </BaseButton>
-    <BaseButton style={{ padding: 5 }}
-      onPress={() => { navigation.navigate('profile') }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Ionicons name="happy-outline" size={23} color='#A3A3A3'></Ionicons>
-        <Text style={{ fontFamily: 'Inter-Regular', fontSize: 12, color: '#A3A3A3' }}>Profile</Text>
-      </View>
-    </BaseButton>
+      <BaseButton style={{ padding: 5 }}
+        onPress={() => { navigation.navigate('search') }}>
+        <Ionicons name='ios-search' size={23} color='#38C6C6'></Ionicons>
+      </BaseButton>
+      <BaseButton style={{ padding: 5 }}
+        onPress={() => { navigation.navigate('forum') }}>
+        <FontAwesome name='comments-o' size={23} color='#38C6C6'></FontAwesome>
+      </BaseButton>
+      <BaseButton style={{ padding: 5 }}
+        onPress={() => { navigation.navigate('profile') }}>
+        <Ionicons name="happy-outline" size={23} color='#38C6C6'></Ionicons>
+      </BaseButton>
+    </View>
   </View>
 )
 
 const style = StyleSheet.create({
   app: {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: "rgba(80,80,80,0)"
   }
 })
 

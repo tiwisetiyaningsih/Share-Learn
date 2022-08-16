@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, StatusBar, ScrollView, Modal, Pressable, AsyncStorage, Alert } from 'react-native'
+import { Text, View, Image, StyleSheet, StatusBar, ScrollView, Modal, Pressable, AsyncStorage, Alert, TextInput } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from "react-native-gesture-handler";
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -12,40 +12,42 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 
-
-
-export class Home extends Component {
+export class DetailNotif extends Component {
     constructor(props) {
         super(props)
         this.state = {
             openModal: false,
-            user: '',
             listPost: [],
-            listLike: [],
-            parmsMapel: '',
-            status_like: '',
-            listLikeOn: []
+            listComment: [],
+            listLikeOn: [],
+            listLike:[],
+            user: '',
+            comment: '',
+            id_post: this.props.route.params.data.id_post,
+            user_post: this.props.route.params.data.user_post,
+            id_user: ''
         }
     }
 
     UNSAFE_componentWillMount = async () => {
+
         const value = await AsyncStorage.getItem('users');
-        let Home = JSON.parse(value)
-        let user = Home.data.fullname
-        this.setState({ user: Home.data.fullname })
-        console.log('nama user', user)
+        let Account = JSON.parse(value)
+        console.log(Account.data.fullname)
+        this.setState({ user: Account.data.fullname, id_user: Account.data.id_users })
+
+        let id_post = this.state.id_post
+        console.log('cek post', Constant.api_url + 'api/post/read/getNotifPostbyId/' + id_post)
         axios({
             method: 'GET',
-            url: Constant.api_url + 'api/post/read'
+            url: Constant.api_url + 'api/post/read/getNotifPostbyId/' + id_post
         }).then((back) => {
             console.log(JSON.stringify(back.data, null, 2))
-            let listPost = back.data.data.reverse()
-            this.setState({ listPost: back.data.data.reverse() })
-            console.log('listPost', listPost)
+            this.setState({ listPost: back.data.data })
         }).catch((error) => {
             console.log("error", error)
         })
-
+        const { user } = this.state
         axios({
             method: 'GET',
             url: Constant.api_url + 'api/post/IdPostbyUser/' + user
@@ -58,26 +60,35 @@ export class Home extends Component {
             console.log("error", error)
 
         })
+        console.log('cek comment', Constant.api_url + 'api/comment/read/' + id_post)
+        axios({
+            method: 'GET',
+            url: Constant.api_url + 'api/comment/read/' + id_post
+        }).then((back) => {
+            console.log(JSON.stringify(back.data, null, 2))
+            this.setState({ listComment: back.data.data })
+        }).catch((error) => {
+            console.log("error", error)
+        })
+
     }
 
     componentDidMount = async () => {
         this.props.navigation.addListener('focus', async () => {
             const value = await AsyncStorage.getItem('users');
-            let Home = JSON.parse(value)
-            let user = Home.data.fullname
-            this.setState({ user: Home.data.fullname })
+            let Account = JSON.parse(value)
+            let user = Account.data.fullname
+            this.setState({ user: Account.data.fullname })
             console.log('nama user', user)
-            axios({
-                method: 'GET',
-                url: Constant.api_url + 'api/post/read'
-            }).then((back) => {
-                console.log(JSON.stringify(back.data, null, 2))
-                let listPost = back.data.data.reverse()
-                this.setState({ listPost: back.data.data.reverse() })
-                console.log('listPost', listPost)
-            }).catch((error) => {
-                console.log("error", error)
-            })
+            let nis = Account.data.nis
+            this.setState({ nis: Account.data.nis })
+            console.log('nis user', nis)
+            let email = Account.data.email
+            this.setState({ email: Account.data.email })
+            console.log('email user', email)
+            let fullname = Account.data.fullname
+            this.setState({ fullname: Account.data.fullname })
+            console.log('fullname user', fullname)
         })
     }
 
@@ -88,8 +99,7 @@ export class Home extends Component {
         let postData =
         {
             "user_like": user,
-            "id_post": id,
-            "id_post_forum" : 0
+            "id_post": id
         }
         console.log(postData)
         console.log(Constant.api_url + 'api/like/create')
@@ -143,48 +153,34 @@ export class Home extends Component {
 
     }
 
-    OpenModal = () => {
-        this.setState({ openModal: true })
-    }
-
-    CloseModal = () => {
-        this.setState({ openModal: false })
-    }
-
-    DeletePost = (id) => {
-        console.log(id)
-        console.log(Constant.api_url + 'api/post/delete/' + id)
+    
+    DeleteComment = (id_comment) => {
+        console.log(id_comment)
+        console.log(Constant.api_url + 'api/comment/delete/' + id_comment)
 
         axios({
             method: 'GET',
-            url: Constant.api_url + 'api/post/delete/' + id
+            url: Constant.api_url + 'api/comment/delete/' + id_comment
         }).then((back) => {
             console.log(JSON.stringify(back.data, null, 2))
             if (back.data.massage === 'success') {
                 console.log("hello")
-                Alert.alert("Successfully", 'The posts have been deleted.', [
-                    {
-                        text: "oke",
-                        style: 'default',
-                        onPress: this.props.navigation.navigate('home')
-                    }
-                ])
-
+                Alert.alert("Successfully", 'The comment has been deleted.')
             } else {
-                Alert.alert("Failed", 'The posts failed to deleted.')
+                Alert.alert("Failed", 'Comment failed to be deleted.')
             }
         }).catch((error) => {
             console.log(error)
         })
 
+        const { user, id_post } = this.state
+        console.log(user)
         axios({
             method: 'GET',
-            url: Constant.api_url + 'api/post/read'
+            url: Constant.api_url + 'api/comment/read/' + id_post
         }).then((back) => {
             console.log(JSON.stringify(back.data, null, 2))
-            let listPost = back.data.data.reverse()
-            this.setState({ listPost: back.data.data.reverse() })
-            console.log('listPost', listPost)
+            this.setState({ listComment: back.data.data })
         }).catch((error) => {
             console.log("error", error)
         })
@@ -204,100 +200,48 @@ export class Home extends Component {
     }
 
     render() {
+        const dataKirim = this.props.route.params.data
+        console.log('hello', dataKirim)
         return (
-            <View style={style.home}>
+            <View style={style.app}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
-                <Header navigation={this.props.navigation} user={this.state.user} Mapel={(materi) => { this.props.navigation.navigate('listpostmapel', materi) }}></Header>
-                <ScrollView>
+                {this.state.listPost.map((item, index) => {
+                    console.log('yyy', item, index)
+                return <Header navigation={this.props.navigation} data={item}></Header>
+                })}
+                <ScrollView style={{ marginBottom: 8 }}>
                     {this.state.listPost.map((item, index) => {
                         console.log('yyy', item, index)
-                        if (item.type_file == 'Image') {
-                            return <PostRecommentImage navigation={this.props.navigation} OpenModal={this.OpenModal} key={index} data={item} PostLike={(data) => this.PostLike(data)} status_like={this.state.status_like} user={this.state.user} DeletePost={(data) => { this.DeletePost(data) }} Download={(file) => this.Download(file)} listLikeOn={this.state.listLikeOn}></PostRecommentImage>
+                        if (dataKirim.type_file === 'Image') {
+                            return <PostImage key={index} data={item} PostLike={(data) => this.PostLike(data)} DeletePost={(data) => { this.DeletePost(data) }} Download={(file) => this.Download(file)} listLikeOn={this.state.listLikeOn}></PostImage>
                         } else {
-                            return <PostRecommentPdf navigation={this.props.navigation} key={index} data={item} PostLike={(data) => this.PostLike(data)} status_like={this.state.status_like} user={this.state.user} DeletePost={(data) => { this.DeletePost(data) }} Download={(file) => this.Download(file)} listLikeOn={this.state.listLikeOn}></PostRecommentPdf>
+                            return <PostPdf key={index} data={item} PostLike={(data) => this.PostLike(data)} DeletePost={(data) => { this.DeletePost(data) }} Download={(file) => this.Download(file)} listLikeOn={this.state.listLikeOn}></PostPdf>
                         }
                     })}
+                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 16, color: '#000', paddingBottom: 10, paddingStart: 20, marginTop: 10 }}>Comment</Text>
+                    {this.state.listComment.map((item, index) => {
+                        console.log(item, index)
+                        return <ListComment key={index} data={item} DeleteComment={(data) => { this.DeleteComment(data) }} user={this.state.user}></ListComment>
+                    })}
                 </ScrollView>
-                <Fouter navigation={this.props.navigation}></Fouter>
             </View>
         )
     }
 }
 
-const Header = ({ navigation, user, Mapel }) => (
-    <View style={{ backgroundColor: '#FFF' }}>
-        <View style={{ backgroundColor: '#FFF', flexDirection: 'row', paddingHorizontal: 20, paddingTop: 10, paddingBottom: 18, justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <BaseButton
-                    onPress={() => { navigation.navigate('profile') }}>
-                    <Image source={require('../assets/logo/user_profile.png')} style={{ width: 42, height: 42 }}></Image>
-                </BaseButton>
-                <View style={{ flexDirection: 'row', paddingStart: 10 }}>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: 'black' }}>Hallo,</Text>
-                    <BaseButton
-                        onPress={() => { navigation.navigate('profile') }}>
-                        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#38C6C6', paddingStart: 2 }}>{user}</Text>
-                    </BaseButton>
-                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 15, color: '#FF8C00' }}>!</Text>
-                </View>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                {/* <BaseButton style={{ padding: 5 }}
-                    onPress={() => { navigation.navigate('createpost') }}>
-                    <Feather name='plus-square' size={22} color='black'></Feather>
-                </BaseButton>
-                <BaseButton style={{ padding: 5 }}
-                    onPress={() => { navigation.navigate('notification') }}>
-                    <MaterialCommunityIcons name='bell-badge' size={22} color='black'></MaterialCommunityIcons>
-                </BaseButton> */}
-                <BaseButton style={{ padding: 5 }}
-                    onPress={() => { navigation.navigate('notification') }}>
-                    <MaterialCommunityIcons name='bell-badge' size={23} color='#000'></MaterialCommunityIcons>
-                </BaseButton>
-            </View>
+const Header = ({ navigation, data }) => (
+    <View style={{ flexDirection: 'row', backgroundColor: '#FFF', padding: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+        <BaseButton style={{ padding: 5 }}
+            onPress={() => { navigation.navigate('notification') }}>
+            <Octicons name='chevron-left' size={25} color='#000' ></Octicons>
+        </BaseButton>
+        <View style={{flex: 1, alignItems: 'center'}}>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>{data.user_post}</Text>
         </View>
-        <View style={{ paddingBottom: 8, paddingHorizontal: 20, backgroundColor: '#FFF' }}>
-            <Text style={{ color: 'black', fontFamily: 'Inter-SemiBold', fontSize: 14 }}>Let's learn!</Text>
-            <Text style={{ color: 'black', fontFamily: 'Inter-SemiBold', fontSize: 14 }}>Choose the lesson you want to learn!</Text>
-        </View>
-        <ScrollView horizontal style={{ paddingHorizontal: 0 }} showsHorizontalScrollIndicator={false}>
-            <BaseButton style={{ marginLeft: 20 }}
-                onPress={() => { Mapel('Bahasa Indonesia') }}>
-                <Image source={require('../assets/logo/mapel_indo.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}
-                onPress={() => { Mapel('Bahasa Inggris') }}>
-                <Image source={require('../assets/logo/mapel_inggris.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}
-                onPress={() => { Mapel('Biologi') }}>
-                <Image source={require('../assets/logo/mapel_biologi.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}
-                onPress={() => { Mapel('Fisika') }}>
-                <Image source={require('../assets/logo/mapel_fis.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}
-                onPress={() => { Mapel('Geografi') }}>
-                <Image source={require('../assets/logo/mapel_geografi.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8 }}
-                onPress={() => { Mapel('Kimia') }}>
-                <Image source={require('../assets/logo/mapel_kim.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-            <BaseButton style={{ marginLeft: 8, marginRight: 20 }}
-                onPress={() => { Mapel('Matematika') }}>
-                <Image source={require('../assets/logo/mapel_mat.png')} style={{ width: 110, height: 110 }}></Image>
-            </BaseButton>
-        </ScrollView>
-        <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 17, color: 'black', paddingVertical: 15, paddingHorizontal: 20 }}>Recommended</Text>
     </View>
 )
 
-
-
-
-const PostRecommentPdf = ({ navigation, data, PostLike, user, DeletePost, Download, listLikeOn }) => {
+const PostPdf = ({ navigation, data, PostLike, Download, listLikeOn }) => {
     let like = false
     listLikeOn.map(item => {
         if (data.id == item.id_post) {
@@ -318,34 +262,6 @@ const PostRecommentPdf = ({ navigation, data, PostLike, user, DeletePost, Downlo
                 </View>
                 <Pressable android_ripple={{ color: '#FFDDDD' }}
                     onPress={() => {
-                        {
-                            data.user_post === user
-                                ?
-                                Alert.alert('Modification', 'You sure you want to edit it or delete it?',
-                                    [
-
-                                        {
-                                            text: 'Cancel',
-                                            style: 'cancel'
-                                        },
-                                        {
-                                            text: 'Edit',
-                                            style: 'default',
-                                            onPress: () => {
-                                                let kirim = {
-                                                    data
-                                                }
-                                                navigation.navigate('editpost', kirim)
-                                            }
-                                        },
-                                        {
-                                            text: 'Delete',
-                                            style: 'default',
-                                            onPress: () => { DeletePost(data.id) }
-                                        }
-                                    ])
-                                : null
-                        }
 
                     }}>
                     <Entypo name='dots-three-horizontal' size={16} color='black'></Entypo>
@@ -385,15 +301,9 @@ const PostRecommentPdf = ({ navigation, data, PostLike, user, DeletePost, Downlo
                         }
                     </View>
                     <View style={{ paddingStart: 10, flexDirection: 'row', alignItems: 'center' }}>
-                        <BaseButton style={{ padding: 5 }}
-                            onPress={() => {
-                                let kirim = {
-                                    data
-                                }
-                                navigation.navigate('comment', kirim)
-                            }}>
+                        <View style={{ padding: 5 }}>
                             <Ionicons name='chatbubble-ellipses-outline' size={23} color='black'></Ionicons>
-                        </BaseButton>
+                        </View>
                         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_comment}</Text>
                     </View>
                 </View>
@@ -410,7 +320,7 @@ const PostRecommentPdf = ({ navigation, data, PostLike, user, DeletePost, Downlo
     )
 }
 
-const PostRecommentImage = ({ navigation, data, PostLike, user, DeletePost, Download, listLikeOn }) => {
+const PostImage = ({ navigation, data, PostLike, DeletePost, Download, listLikeOn }) => {
     let like = false
     listLikeOn.map(item => {
         if (data.id == item.id_post) {
@@ -431,34 +341,6 @@ const PostRecommentImage = ({ navigation, data, PostLike, user, DeletePost, Down
                 </View>
                 <Pressable android_ripple={{ color: '#FFDDDD' }}
                     onPress={() => {
-                        {
-                            data.user_post === user
-                                ?
-                                Alert.alert('Modification', 'You sure you want to edit it or delete it?',
-                                    [
-                                        {
-                                            text: 'Cancel',
-                                            style: 'cancel'
-                                        },
-                                        {
-                                            text: 'Edit',
-                                            style: 'default',
-                                            onPress: () => {
-                                                let kirim = {
-                                                    data
-                                                }
-                                                navigation.navigate('editpost', kirim)
-                                            }
-                                        },
-                                        {
-                                            text: 'Delete',
-                                            style: 'default',
-                                            onPress: () => { DeletePost(data.id) }
-                                        }
-                                    ])
-                                : null
-                        }
-
                     }}>
                     <Entypo name='dots-three-horizontal' size={16} color='black'></Entypo>
                 </Pressable>
@@ -490,15 +372,9 @@ const PostRecommentImage = ({ navigation, data, PostLike, user, DeletePost, Down
                         }
                     </View>
                     <View style={{ paddingStart: 10, flexDirection: 'row', alignItems: 'center' }}>
-                        <BaseButton style={{ padding: 5 }}
-                            onPress={() => {
-                                let kirim = {
-                                    data
-                                }
-                                navigation.navigate('comment', kirim)
-                            }}>
+                        <View style={{ padding: 5 }}>
                             <Ionicons name='chatbubble-ellipses-outline' size={23} color='black'></Ionicons>
-                        </BaseButton>
+                        </View>
                         <Text style={{ fontFamily: 'Inter-Medium', fontSize: 10, color: 'black' }}>{data.jumlah_comment}</Text>
                     </View>
                 </View>
@@ -515,44 +391,56 @@ const PostRecommentImage = ({ navigation, data, PostLike, user, DeletePost, Down
     )
 }
 
-const Fouter = ({ navigation }) => (
-    <View style={{ backgroundColor: '#FFF', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingVertical: 6, marginTop: 2, elevation: 5 }}>
-        <View style={{ backgroundColor: '#FFF', borderRadius: 50, marginTop: - 20, padding: 3 }}>
-            <BaseButton>
-                <View style={{ backgroundColor: '#38C6C6', borderRadius: 50, padding: 10 }}>
-                    <Ionicons name="home" size={23} color='#FFF'></Ionicons>
-                </View>
-            </BaseButton>
+const ListComment = ({ data, DeleteComment, user }) => (
+    <View style={{ paddingHorizontal: 20, flexDirection: 'row', backgroundColor: '#FFF' }}>
+        <View>
+            <Image source={require('../assets/logo/user_profile.png')} ></Image>
         </View>
-        {/* <BaseButton style={{ padding: 5 }}
-            onPress={() => { navigation.navigate('home') }}>
-            <Ionicons name="home" size={23} color='#38C6C6'></Ionicons>
-        </BaseButton> */}
-        <BaseButton style={{ padding: 5 }}
-            onPress={() => { navigation.navigate('notes') }}>
-            <MaterialCommunityIcons name='notebook-outline' size={23} color='#38C6C6'></MaterialCommunityIcons>
-        </BaseButton>
-        <BaseButton style={{ padding: 5 }}
-            onPress={() => { navigation.navigate('search') }}>
-            <Ionicons name='ios-search' size={23} color='#38C6C6'></Ionicons>
-        </BaseButton>
-        <BaseButton style={{ padding: 5 }}
-            onPress={() => { navigation.navigate('forum') }}>
-            <FontAwesome name='comments-o' size={23} color='#38C6C6'></FontAwesome>
-        </BaseButton>
-        <BaseButton style={{ padding: 5 }}
-            onPress={() => { navigation.navigate('profile') }}>
-            <Ionicons name="happy-outline" size={23} color='#38C6C6'></Ionicons>
-        </BaseButton>
+        <View style={{ backgroundColor: '#ECECEC', paddingHorizontal: 15, paddingTop: 5, margin: 10, marginEnd: 20, elevation: 5, flexDirection: 'column', justifyContent: 'space-between', borderBottomEndRadius: 10, borderBottomStartRadius: 10, borderTopEndRadius: 10, borderColor: '#ECECEC', borderWidth: 1, elevation: 2, width: 310 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline', width: 235 }}>
+                    <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 13, color: 'black' }}>{data.user_comment},</Text>
+                    <Text style={{ fontFamily: 'Inter-Reguler', fontSize: 12, color: '#000', paddingStart: 2 }}>{data.comment}</Text>
+                </View>
+                <Pressable android_ripple={{ color: '#FFDDDD' }}
+                    onPress={() => {
+                        {
+                            data.user_comment === user
+                                ?
+                                Alert.alert('Delete', 'Are you sure to delete?',
+                                    [
+
+                                        {
+                                            text: 'Yes',
+                                            style: 'default',
+                                            onPress: () => { DeleteComment(data.id_comment) }
+                                        },
+                                        {
+                                            text: 'No',
+                                            style: 'cancel'
+                                        }
+
+                                    ])
+                                : null
+                        }
+                    }}>
+                    <Feather name='more-horizontal' size={15} color='#000'></Feather>
+                </Pressable>
+            </View>
+            <View style={{ alignItems: 'flex-start', paddingBottom: 8, paddingTop: 5 }}>
+                <Text style={{ fontFamily: 'Inter-Regular', fontSize: 8, color: 'black' }}>{data.updated_at}</Text>
+            </View>
+        </View>
     </View>
+
 )
 
 
 const style = StyleSheet.create({
-    home: {
+    app: {
         flex: 1,
-        backgroundColor: 'rgba(80,80,80,0)'
+        backgroundColor: "#FFF"
     }
 })
 
-export default Home
+export default DetailNotif

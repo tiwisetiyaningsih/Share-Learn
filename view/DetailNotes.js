@@ -37,7 +37,7 @@ export class DetailNotes extends Component {
             console.log(JSON.stringify(back.data, null, 2))
             if (back.data.massage === 'success') {
                 console.log("hello")
-                Alert.alert("Berhasil", 'Note berhasil terhapus', [
+                Alert.alert("Successfully", 'The note was erased.', [
                     {
                         text: "oke",
                         style: 'default',
@@ -46,7 +46,7 @@ export class DetailNotes extends Component {
                 ])
 
             } else {
-                Alert.alert("Gagal", 'Note gagal terhapus')
+                Alert.alert("Failed", 'The note failed to be erased.')
             }
         }).catch((error) => {
             console.log(error)

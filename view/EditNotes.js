@@ -1,4 +1,4 @@
-import { Text, View, StatusBar, StyleSheet, TextInput, Alert } from 'react-native'
+import { Text, View, StatusBar, StyleSheet, TextInput, Alert, ScrollView, Image } from 'react-native'
 import React, { Component } from 'react'
 import { BaseButton } from 'react-native-gesture-handler'
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -46,9 +46,9 @@ export class EditNotes extends Component {
         }).then((back) => {
             console.log(back.status)
             if (back.status === 200) {
-                Alert.alert("success", "update berhasil", [
+                Alert.alert("Successfully", "Note was successfully updated", [
                     {
-                        text: "oke",
+                        text: "Oke",
                         style: 'default',
                         onPress: this.props.navigation.navigate('notes')
                     }
@@ -67,7 +67,9 @@ export class EditNotes extends Component {
             <View style={style.app}>
                 <StatusBar backgroundColor={'#FFF'} barStyle='dark-content'></StatusBar>
                 <Header navigation={this.props.navigation} hasilKirim={hasilKirim} EditNote={(data) => { this.EditNote(data) }}></Header>
-                <FormEditNotes SetJudul={(text) => { this.SetJudul(text) }} SetSubJudul={(text) => { this.SetSubJudul(text) }} SetNotes={(text) => { this.SetNotes(text) }} judul={this.state.judul} sub_judul={this.state.sub_judul} notes={this.state.notes}></FormEditNotes>
+                <ScrollView style={{ marginBottom: 20 }}>
+                    <FormEditNotes SetJudul={(text) => { this.SetJudul(text) }} SetSubJudul={(text) => { this.SetSubJudul(text) }} SetNotes={(text) => { this.SetNotes(text) }} judul={this.state.judul} sub_judul={this.state.sub_judul} notes={this.state.notes}></FormEditNotes>
+                </ScrollView>
             </View>
         )
     }
@@ -89,8 +91,11 @@ const Header = ({ navigation, EditNote, hasilKirim }) => (
 
 const FormEditNotes = ({ SetJudul, SetSubJudul, SetNotes, judul, sub_judul, notes }) => (
     <View style={{ paddingHorizontal: 30, marginTop: 20 }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Image source={require('../assets/images/note.png')}></Image>
+        </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Judul</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Tittle</Text>
             {/* <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}>{hasilKirim.judul_notes}</TextInput> */}
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
                 placeholder='What do you think?'
@@ -99,7 +104,7 @@ const FormEditNotes = ({ SetJudul, SetSubJudul, SetNotes, judul, sub_judul, note
             </TextInput>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Sub Judul</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Subtitles</Text>
             {/* <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}>{hasilKirim.sub_judul_notes}</TextInput> */}
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}
                 placeholder='What do you think?'
@@ -108,7 +113,7 @@ const FormEditNotes = ({ SetJudul, SetSubJudul, SetNotes, judul, sub_judul, note
             </TextInput>
         </View>
         <View style={{ flexDirection: 'column', paddingTop: 30, marginHorizontal: 10, borderBottomColor: '#000', borderBottomWidth: 1.2 }}>
-            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Notes</Text>
+            <Text style={{ fontFamily: 'Inter-SemiBold', fontSize: 14, color: '#000' }}>Note</Text>
             {/* <TextInput  multiline style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }}>{hasilKirim.notes}</TextInput> */}
             <TextInput style={{ fontFamily: 'Inter-Regular', fontSize: 13, color: '#000', marginEnd: 10 }} multiline={true}
                 placeholder='What do you think?'
