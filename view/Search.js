@@ -356,8 +356,7 @@ const PostPdf = ({ navigation, data, PostLike, user, listLikeOn, Download }) => 
         <View style={{ backgroundColor: '#FFF', paddingHorizontal: 20, paddingVertical: 15, marginBottom: 4, elevation: 1 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <BaseButton
-                        onPress={() => { navigation.navigate('profile') }}>
+                    <BaseButton>
                         <Image source={require('../assets/logo/user_profile.png')} style={{ width: 35, height: 35 }}></Image>
                     </BaseButton>
                     <Text style={{ fontFamily: 'Inter-Medium', fontSize: 13, color: 'black', paddingHorizontal: 8 }}>{data.user_post}</Text>

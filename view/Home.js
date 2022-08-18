@@ -226,7 +226,7 @@ export class Home extends Component {
 
 const Header = ({ navigation, user, Mapel }) => (
     <View style={{ backgroundColor: '#FFF' }}>
-        <View style={{ backgroundColor: '#FFF', flexDirection: 'row', paddingHorizontal: 20, paddingTop: 10, paddingBottom: 18, justifyContent: 'space-between' }}>
+        <View style={{ backgroundColor: '#FFF', flexDirection: 'row', paddingHorizontal: 20, marginTop: 15, paddingBottom: 18, justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <BaseButton
                     onPress={() => { navigation.navigate('profile') }}>
